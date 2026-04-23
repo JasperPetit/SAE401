@@ -4,24 +4,32 @@ const scoreDisplay = document.getElementById('score');
 const startButton = document.getElementById('startButton');
 
 const gridSize = 20; // Taille d'un segment de serpent et de la nourriture
-let snake;
-let food;
+let penguin; // Le "serpent" est maintenant un pingouin
+let food; // La nourriture est un poisson
 let direction;
 let score;
 let gameInterval;
-let gameSpeed = 100; // Millisecondes par frame
+let gameSpeed = 150; // Millisecondes par frame (le pingouin glisse un peu moins vite)
+let snowflakes = []; // Tableau pour stocker les flocons de neige
 
 function initializeGame() {
-    snake = [
-        { x: 10 * gridSize, y: 10 * gridSize } // Position initiale du serpent
+    penguin = [
+        { x: 10 * gridSize, y: 10 * gridSize } // Position initiale du pingouin
     ];
     food = generateFood();
     direction = 'right'; // Direction initiale
     score = 0;
     scoreDisplay.textContent = `Score: ${score}`;
-    gameSpeed = 100; // Réinitialise la vitesse
+    gameSpeed = 150; // Réinitialise la vitesse
     if (gameInterval) clearInterval(gameInterval); // Arrête tout intervalle précédent
-    startButton.textContent = 'Recommencer';
+    startButton.textContent = 'Recommencer la glissade';
+
+    // Initialisation des flocons de neige
+    snowflakes = [];
+    for (let i = 0; i < 50; i++) { // Nombre de flocons
+        snowflakes.push(createSnowflake());
+    }
+
     startGameLoop();
 }
 
@@ -50,17 +58,57 @@ function draw() {
     // Nettoyer le canvas
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    // Dessiner le serpent
-    for (let i = 0; i < snake.length; i++) {
-        ctx.fillStyle = (i === 0) ? 'green' : 'lime'; // Tête verte, corps vert clair
-        ctx.strokeStyle = 'darkgreen';
-        ctx.fillRect(snake[i].x, snake[i].y, gridSize, gridSize);
-        ctx.strokeRect(snake[i].x, snake[i].y, gridSize, gridSize);
+    // Dessiner les flocons de neige
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.8)'; // Flocons blancs semi-transparents
+    snowflakes.forEach(flake => {
+        ctx.beginPath();
+        ctx.arc(flake.x, flake.y, flake.radius, 0, Math.PI * 2);
+        ctx.fill();
+    });
+
+    // Dessiner le pingouin (anciennement le serpent)
+    for (let i = 0; i < penguin.length; i++) {
+        // Tête du pingouin (noir/bleu foncé)
+        ctx.fillStyle = (i === 0) ? '#333333' : '#FFFFFF'; // Tête sombre, corps blanc
+        ctx.strokeStyle = (i === 0) ? '#000000' : '#CCCCCC'; // Bordure foncée, corps gris clair
+
+        // Dessine la forme de base du pingouin
+        ctx.fillRect(penguin[i].x, penguin[i].y, gridSize, gridSize);
+        ctx.strokeRect(penguin[i].x, penguin[i].y, gridSize, gridSize);
+
+        // Si c'est la tête, ajouter un bec (petit carré orange)
+        if (i === 0) {
+            ctx.fillStyle = '#FFA500'; // Orange pour le bec
+            // Positionnement du bec en fonction de la direction
+            let beakX = penguin[i].x;
+            let beakY = penguin[i].y;
+            const beakSize = gridSize / 3;
+
+            switch (direction) {
+                case 'up':
+                    beakX += gridSize / 3;
+                    beakY -= beakSize;
+                    break;
+                case 'down':
+                    beakX += gridSize / 3;
+                    beakY += gridSize;
+                    break;
+                case 'left':
+                    beakX -= beakSize;
+                    beakY += gridSize / 3;
+                    break;
+                case 'right':
+                    beakX += gridSize;
+                    beakY += gridSize / 3;
+                    break;
+            }
+            ctx.fillRect(beakX, beakY, beakSize, beakSize);
+        }
     }
 
-    // Dessiner la nourriture
-    ctx.fillStyle = 'red';
-    ctx.strokeStyle = 'darkred';
+    // Dessiner la nourriture (poisson)
+    ctx.fillStyle = '#FF4500'; // Orange vif pour le poisson
+    ctx.strokeStyle = '#CD3700';
     ctx.fillRect(food.x, food.y, gridSize, gridSize);
     ctx.strokeRect(food.x, food.y, gridSize, gridSize);
 }
@@ -125,7 +173,7 @@ function update() {
 
 function gameOver() {
     clearInterval(gameInterval);
-    alert(`La glissade est terminée ! Votre score est de : ${score} points.`);
+    alert(`La glissade est terminée ! Votre score est de : ${score} poissons.`);
     startButton.textContent = 'Recommencer la glissade';
 }
 
@@ -157,7 +205,9 @@ startButton.addEventListener('click', initializeGame);
 
 // Initialiser le jeu une première fois pour afficher le pingouin et la nourriture (poisson)
 // sans démarrer le mouvement tant que le bouton n'est pas cliqué.
-initializeGame(); // Pour avoir le pingouin et la nourriture affichés au départ.
-clearInterval(gameInterval); // S'assure que le jeu ne démarre pas automatiquement.
-startButton.textContent = 'Démarrer la Glissade'; // S'assure du bon texte
-draw(); // Dessine l'état initial avec les flocons statiques au début
+// On appelle initializeGame une première fois, puis on s'assure que l'intervalle n'est pas lancé
+// et que le texte du bouton est correct. Le draw() final permet d'afficher les éléments.
+initializeGame();
+clearInterval(gameInterval);
+startButton.textContent = 'Démarrer la Glissade';
+draw();
