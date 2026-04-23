@@ -66,9 +66,9 @@ function draw() {
 }
 
 function update() {
-    const head = { x: snake[0].x, y: snake[0].y };
+    const head = { x: penguin[0].x, y: penguin[0].y }; // La tête du pingouin
 
-    // Déplacer la tête du serpent
+    // Déplacer la tête du pingouin
     switch (direction) {
         case 'up':
             head.y -= gridSize;
@@ -84,9 +84,10 @@ function update() {
             break;
     }
 
-    // Vérifier les collisions
+    // Vérifier les collisions avec les bords de la banquise
     const hitWall = head.x < 0 || head.x >= canvas.width || head.y < 0 || head.y >= canvas.height;
-    const hitSelf = snake.some((segment, index) => index !== 0 && segment.x === head.x && segment.y === head.y);
+    // Vérifier les collisions avec le corps du pingouin
+    const hitSelf = penguin.some((segment, index) => index !== 0 && segment.x === head.x && segment.y === head.y);
 
     if (hitWall || hitSelf) {
         gameOver();
@@ -94,29 +95,38 @@ function update() {
     }
 
     // Ajouter la nouvelle tête
-    snake.unshift(head);
+    penguin.unshift(head);
 
-    // Vérifier si le serpent a mangé la nourriture
+    // Vérifier si le pingouin a mangé la nourriture (poisson)
     if (head.x === food.x && head.y === food.y) {
-        score += 10;
+        score += 10; // Le score augmente de 10
         scoreDisplay.textContent = `Score: ${score}`;
         food = generateFood(); // Générer une nouvelle nourriture
-        // Augmenter la vitesse du jeu après chaque nourriture mangée (optionnel)
-        gameSpeed = Math.max(50, gameSpeed - 5); // Vitesse minimale de 50ms
-        clearInterval(gameInterval);
-        startGameLoop();
+        // Augmenter la vitesse de glissade légèrement
+        gameSpeed = Math.max(50, gameSpeed - 5); // La vitesse minimale est 50ms
+        clearInterval(gameInterval); // Arrête l'intervalle actuel
+        startGameLoop(); // Redémarre avec la nouvelle vitesse
     } else {
         // Supprimer la queue si pas de nourriture mangée
-        snake.pop();
+        penguin.pop();
     }
 
-    draw();
+    // Mettre à jour la position des flocons de neige
+    snowflakes.forEach(flake => {
+        flake.y += flake.speed;
+        if (flake.y > canvas.height) { // Si le flocon sort de l'écran, le réinitialiser en haut
+            flake.y = 0;
+            flake.x = Math.random() * canvas.width;
+        }
+    });
+
+    draw(); // Redessiner le jeu après mise à jour
 }
 
 function gameOver() {
     clearInterval(gameInterval);
-    alert(`Fin du jeu ! Votre score est de : ${score}`);
-    startButton.textContent = 'Recommencer le jeu';
+    alert(`La glissade est terminée ! Votre score est de : ${score} points.`);
+    startButton.textContent = 'Recommencer la glissade';
 }
 
 function changeDirection(event) {
@@ -145,11 +155,9 @@ function startGameLoop() {
 document.addEventListener('keydown', changeDirection);
 startButton.addEventListener('click', initializeGame);
 
-// Initialiser le jeu une première fois pour afficher le serpent et la nourriture
+// Initialiser le jeu une première fois pour afficher le pingouin et la nourriture (poisson)
 // sans démarrer le mouvement tant que le bouton n'est pas cliqué.
-// Ou laisser le bouton "Commencer" faire la première initialisation.
-// Pour l'instant, on attend le clic sur le bouton pour initializeGame.
-// On dessine juste une fois au chargement pour montrer l'état initial.
-initializeGame(); // Pour avoir le serpent et la nourriture affichés au départ.
-clearInterval(gameInterval); // S'assure que le jeu ne démarre pas auto.
-startButton.textContent = 'Commencer le jeu'; // S'assure du bon texte
+initializeGame(); // Pour avoir le pingouin et la nourriture affichés au départ.
+clearInterval(gameInterval); // S'assure que le jeu ne démarre pas automatiquement.
+startButton.textContent = 'Démarrer la Glissade'; // S'assure du bon texte
+draw(); // Dessine l'état initial avec les flocons statiques au début
