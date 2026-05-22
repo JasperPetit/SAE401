@@ -40,10 +40,10 @@ function generateFood() {
             x: Math.floor(Math.random() * (canvas.width / gridSize)) * gridSize,
             y: Math.floor(Math.random() * (canvas.height / gridSize)) * gridSize
         };
-        // S'assurer que la nourriture n'apparaît pas sur le serpent
+        // S'assurer que la nourriture n'apparaît pas sur le pingouin
         let collisionWithSnake = false;
-        for (let i = 0; i < snake.length; i++) {
-            if (snake[i].x === newFood.x && snake[i].y === newFood.y) {
+        for (let i = 0; i < penguin.length; i++) {
+            if (penguin[i].x === newFood.x && penguin[i].y === newFood.y) {
                 collisionWithSnake = true;
                 break;
             }
