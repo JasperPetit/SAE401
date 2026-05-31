@@ -10,7 +10,7 @@ class CommandeModel {
         $this->pdo = $pdo;
     }
 
-    public function recupererTroisDernieresCommandes() {
+    public function getTroisDernieresCommandes() {
         $sql = "SELECT C.NumeroBonCommande, C.AdresseDepart, sc.Statut, C.AdresseArivee, D.nomDepartement
                 FROM Commande C
                 JOIN StatutCommande sc ON C.IdStatut = sc.IdStatut
@@ -42,7 +42,7 @@ class CommandeModel {
         return $this->pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function recupereToutesLesInfosParCommandes($NumeroBonCommande) {
+    public function getToutesLesInfosParCommandes($NumeroBonCommande) {
         $requete_sql = "SELECT cmd.NumeroBonCommande, cmd.AdresseArivee,
                                co.date_arrivee_reel, co.date_arrivee_prevu
                         FROM Colis co
@@ -56,7 +56,7 @@ class CommandeModel {
         return $resultat_infos->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function recupererToutesLesCommandesParUtilisateur($identifiant_cas) {
+    public function getToutesLesCommandesParUtilisateur($identifiant_cas) {
         $sql = "SELECT C.*, De.Prix
                 FROM Commande C
                 INNER JOIN Devis De ON C.IdDevis = De.IdDevis
@@ -91,14 +91,14 @@ class CommandeModel {
         return $query->execute([$numeroBonCommande]);
     }
 
-    public function ajouterCommande($numero, $adresseDepart, $adresseArivee, $dateDepartDossier, $nbColis, $idDevis, $dateArriveeSaisie) {
+    public function addCommande($numero, $adresseDepart, $adresseArivee, $dateDepartDossier, $nbColis, $IdDevis, $dateArriveeSaisie) {
         $sql = "INSERT INTO Commande (NumeroBonCommande, AdresseDepart, AdresseArivee, DateAjout, IdStatut, IdDevis)
                 VALUES (?, ?, ?, ?, (SELECT IdStatut FROM StatutCommande WHERE Statut = 'en_cours'), ?)";
         $query = $this->pdo->prepare($sql);
-        return $query->execute([$numero, $adresseDepart, $adresseArivee, $dateArriveeSaisie, $idDevis]);
+        return $query->execute([$numero, $adresseDepart, $adresseArivee, $dateArriveeSaisie, $IdDevis]);
     }
 
-    public function modifierCommande($numero, $adresseDepart, $adresseArivee, $idDevis, $dateArriveeSaisie) {
+    public function updateCommande($numero, $adresseDepart, $adresseArivee, $IdDevis, $dateArriveeSaisie) {
         $sql = "UPDATE Commande SET
                 IdDevis = ?,
                 AdresseDepart = ?,
@@ -106,7 +106,7 @@ class CommandeModel {
                 DateAjout = ?
                 WHERE NumeroBonCommande = ?";
         $query = $this->pdo->prepare($sql);
-        return $query->execute([$idDevis, $adresseDepart, $adresseArivee, $dateArriveeSaisie, $numero]);
+        return $query->execute([$IdDevis, $adresseDepart, $adresseArivee, $dateArriveeSaisie, $numero]);
     }
 
 }
