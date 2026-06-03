@@ -26,7 +26,7 @@ class FournisseurController{
 
             if (!empty($nomEntreprise)) {
                 try {
-                    $this->FournisseurModel->ajouterFournisseur( $nomEntreprise, $adresse, $NumeroTelephone, $Mail);
+                    $this->FournisseurModel->addFournisseur($nomEntreprise, $adresse, $NumeroTelephone, $Mail);
 
                     // Redirection vers la liste après succès
                     header("Location: afficherFournisseur");
@@ -86,7 +86,7 @@ class FournisseurController{
 
             if (!empty($id) && !empty($nom)) {
                 try {
-                    $this->FournisseurModel->modifierFournisseur( $id, $nom, $adresse, $tel, $mail);
+                    $this->FournisseurModel->updateFournisseur( $id, $nom, $adresse, $tel, $mail);
                     header("Location: afficherFournisseur");
                     exit();
                 } catch (Exception $e) {
