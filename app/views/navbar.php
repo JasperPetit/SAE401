@@ -9,7 +9,7 @@ $nom_complet = $_SESSION['nom_complet'] ?? 'Utilisateur Inconnu';
 
 $menus = [];
 
-if ($role === 'ADMIN') {
+if ($role === 'Administrateur') {
     $menus = [
         "Tableau de bord" => ["action" => "accueil", "icon" => "fa-chart-pie"],
         "Mes commandes"   => ["action" => "afficherCommande", "icon" => "fa-file-invoice-dollar"],
@@ -20,7 +20,7 @@ if ($role === 'ADMIN') {
     ];
 } elseif ($role === 'Service_Postal') {
     $menus = [
-        "Tableau de bord" => ["action" => "pageTableauDeBord", "icon" => "fa-chart-pie"],
+        "Tableau de bord" => ["action" => "accueil", "icon" => "fa-chart-pie"],
         "Nouvel envoi"    => ["action" => "nouveau", "icon" => "fa-paper-plane"],
         "Suivi des colis" => ["action" => "suivi", "icon" => "fa-box-open"],
         "Bons Commandes"  => ["action" => "afficherCommande", "icon" => "fa-file-invoice-dollar"]
@@ -30,7 +30,7 @@ if ($role === 'ADMIN') {
         "Arbitrage Devis" => ["action" => "pageServiceFinancierDevis", "icon" => "fa-balance-scale"],
         "Fournisseurs"    => ["action" => "afficherFournisseur", "icon" => "fa-handshake"]
     ];
-} elseif ($role === 'Demandeur') {
+} elseif ($role === 'Utilisateur') {
     $menus = [
         "Mes Projets/Devis" => ["action" => "accueil", "icon" => "fa-file-signature"],
         "Mes Commandes"     => ["action" => "afficherCommande", "icon" => "fa-file-invoice-dollar"]

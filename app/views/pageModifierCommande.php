@@ -12,7 +12,7 @@
     </style>
 </head>
 <body>
-    <?php require_once 'app/views/navbar.php'; ?>
+    <?php require_once VIEWS . '/navbar.php'; ?>
 
     <main class="main-content">
         <div class="content-header">

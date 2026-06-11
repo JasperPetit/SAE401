@@ -38,10 +38,10 @@ class DevisController{
                 $_POST['idFournisseur'] ?? ''
             );
 
-            if (isset($_SESSION['role']) && $_SESSION['role']=='ADMIN'){
+            if (isset($_SESSION['role']) && $_SESSION['role']=='Administrateur'){
                 header('Location: pageInfosDevis?success=1');
             }
-            elseif (isset($_SESSION['role']) && $_SESSION['role']=='Demandeur'){
+            elseif (isset($_SESSION['role']) && $_SESSION['role']=='Utilisateur'){
                 header('Location: PageInfosDevisDemandeur');
             } else {
                 header('Location: pageInfosDevis?success=1');
@@ -138,25 +138,29 @@ class DevisController{
         }
         $resFournisseurs = $this->FournisseurModel->getAllFournisseurs();
         
-        require_once __DIR__ . '/../views/pageModifierDevis.php';
+        require_once VIEWS . '/pageModifierDevis.php';
 
    }
 
     public function afficherDevis(){
         $listeDevis = $this->DevisModel->getAllDevisDecroissant();
 
-        require_once 'app/views/pageInfosDevisAdmin.php';
+        if (isset($_SESSION['role']) && $_SESSION['role'] === 'Service_Financier') {
+            require_once VIEWS . '/PageServiceFinancierDevis.php';
+        } else {
+            require_once VIEWS . '/pageInfosDevisAdmin.php';
+        }
     }
 
     public function afficherDevisDepartement(){
         $listeDevis = $this->DevisModel->getDevisDepartement($_SESSION['departement'] ?? '');
 
-        require_once 'views/pageInfosDevis.php';
+        require_once VIEWS . '/pageInfosDevis.php';
     }
 
     public function afficherFormulaire(){
         $resFournisseurs = $this->FournisseurModel->getAllFournisseurs();
-        require_once 'views/pageAjoutDevis.php';
+        require_once VIEWS . '/pageAjoutDevis.php';
     }
 
     // Action : Valider un devis

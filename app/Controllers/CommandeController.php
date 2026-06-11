@@ -83,37 +83,31 @@ class CommandeController{
         $listeDevis = $this->DevisModel->getAllDevisDecroissant();   
         $resNomEntreprise = $this->FournisseurModel->getAllFournisseurs();
 
-        require_once 'views/pageAjouterCommande.php';
+        require_once VIEWS . '/pageAjouterCommande.php';
     }
 
     public function afficherCommandes(){
-        $resListeCommandes = $this->CommandeModel->getListeCommandesCompletes();
-        $idDevis = $this->DevisModel->RecupererIdDevis();
-        $resNomEntreprise = $this->FournisseurModel->getAllFournisseurs($this->pdo);
+        // Pour les Administrateurs et le Service Postal, on affiche toutes les commandes
+        if (isset($_SESSION['role']) && ($_SESSION['role'] === 'Administrateur' || $_SESSION['role'] === 'Service_Postal')) {
+            $resListeCommandes = $this->CommandeModel->getListeCommandesCompletes();
+        } else {
+            // Pour les simples Utilisateurs, on n'affiche que leurs commandes
+            $resListeCommandes = $this->CommandeModel->getToutesLesCommandesParUtilisateur($_SESSION['utilisateur_id']);
+        }
 
-        if(isset($_SESSION['role']) && $_SESSION['role'] === 'ADMIN'){
-            require_once 'views/pageMesCommandesAdmin.php';
-        }
-        elseif (isset($_SESSION['role']) && $_SESSION['role'] === 'Service_Postal') {
-            require_once 'views/pageMesCommandesPostale.php';
-        } 
-        else {
-            require_once 'views/pageMesCommandes.php';
-        }
+        // On utilise la seule vue de commande qui existe réellement
+        require_once VIEWS . '/pageMesCommandes.php';
     }
     
 
     public function supprimerCommande(){
-        $resListeCommandes = $this->CommandeModel->getListeCommandesCompletes();
-
         if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['supprimer_commande'])) {
             $NumeroBonDeCommande = $_POST['NumeroBonDeCommande'] ?? '';
 
             if (!empty($NumeroBonDeCommande)) {
                 try {
                     $this->CommandeModel->deleteCommande($NumeroBonDeCommande);
-                    
-                    header("Location: index.php?action=afficherCommandeAdmin");
+                    header("Location: index.php?action=afficherCommande");
                     exit();
                 } catch (Exception $e) {
                     echo "<script>alert('Erreur : Impossible de supprimer cette commande.');</script>";
@@ -146,7 +140,7 @@ class CommandeController{
                     $success = $this->CommandeModel->updateCommande( $NumeroBonDeCommande, $AdresseDepart, $AdresseArivee, $nbColis, $idDevis, $dateArrivee);
 
                     if ($success) {
-                        header("Location: afficherCommande");
+                        header("Location: index.php?action=afficherCommande");
                         exit();
                     } else {
                         $erreur = "La mise à jour a échoué.";
@@ -161,7 +155,7 @@ class CommandeController{
 
         $listeDevis = $this->DevisModel->getAllDevisDecroissant();
         $resNomEntreprise = $this->FournisseurModel->getAllFournisseurs();
-        require_once __DIR__ . '/../views/pageModifierCommande.php';   
+        require_once VIEWS . '/pageModifierCommande.php';   
     }
 }
 ?>

@@ -67,7 +67,7 @@ switch ($action) {
     // === ACCUEIL / TABLEAU DE BORD ===
     case 'accueil':
         // Redirection intelligente selon le profil pour charger les bonnes fonctions d'accueil
-        if (isset($_SESSION['role']) && $_SESSION['role'] === 'Demandeur') {
+        if (isset($_SESSION['role']) && $_SESSION['role'] === 'Utilisateur') {
             $controller = new \App\Controllers\DevisController($db);
             $controller->afficherDevisDepartement();
         } elseif (isset($_SESSION['role']) && $_SESSION['role'] === 'Service_Postal') {
@@ -82,7 +82,7 @@ switch ($action) {
     // === GESTION DES DEVIS ===
     case 'pageInfosDevis':
         $controller = new \App\Controllers\DevisController($db);
-        if (isset($_SESSION['role']) && $_SESSION['role'] === 'ADMIN') {
+        if (isset($_SESSION['role']) && $_SESSION['role'] === 'Administrateur') {
             $controller->afficherDevis();
         } else {
             $controller->afficherDevisDepartement();
@@ -118,8 +118,8 @@ switch ($action) {
     case 'afficherCommande':
         $controller = new \App\Controllers\CommandeController($db);
         // Utilise la méthode native de consultation de ton CommandeController
-        if (method_exists($controller, 'afficherCommande')) {
-            $controller->afficherCommande();
+        if (method_exists($controller, 'afficherCommandes')) {
+            $controller->afficherCommandes();
         }
         break;
 
@@ -152,7 +152,7 @@ switch ($action) {
 
     case 'nouveau':
         // Gère la réimpression ou l'édition d'étiquettes
-        require_once 'app/views/pageNouvelEnvoi.php';
+        require_once VIEWS . '/pageNouvelEnvoi.php';
         break;
 
     // === GESTION DES FOURNISSEURS ===

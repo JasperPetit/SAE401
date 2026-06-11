@@ -12,8 +12,7 @@ class AuthController {
 
     public function afficherLogin() {
         $erreur = '';
-        // CORRIGÉ : Le chemin est désormais parfait
-        require_once 'app/views/pageLogin.php';
+        require_once VIEWS . '/pageLogin.php';
     }
 
 public function connecter() {
@@ -46,7 +45,7 @@ public function connecter() {
                     } elseif ($utilisateur['nomRole'] === 'Service_Postal') {
                         header('Location: index.php?action=accueil');
                     } elseif ($utilisateur['nomRole'] === 'Service_Financier') {
-                        header('Location: index.php?action=pageServiceFinancierDevis');
+                        header('Location: index.php?action=accueil');
                     } else {
                         header('Location: index.php?action=accueil');
                     }
@@ -61,7 +60,7 @@ public function connecter() {
             $erreur = 'Veuillez remplir tous les champs';
         }
     }
-    require_once 'app/views/pageLogin.php';
+    require_once VIEWS . '/pageLogin.php';
 }
 
     public function deconnecter() {

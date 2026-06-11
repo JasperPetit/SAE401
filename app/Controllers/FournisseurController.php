@@ -38,7 +38,7 @@ class FournisseurController{
                 }
             }
         }
-        require_once 'views/pageAjouterFournisseur.php';
+        require_once VIEWS . '/pageAjouterFournisseur.php';
     }
 
     public function supprimerFournisseur(){
@@ -61,8 +61,8 @@ class FournisseurController{
 
         // Récupération pour affichage (uniquement en GET)
         $resFournisseurs = $this->FournisseurModel->getAllFournisseurs();
-        return $resFournisseurs; // ou include de la vue
-        }
+        return $resFournisseurs; 
+    }
 
 
     public function modifierFournisseur(){
@@ -73,7 +73,7 @@ class FournisseurController{
         if (isset($_GET['modifier'])) {
             $id = $_GET['modifier'];
             $fournisseur = $this->FournisseurModel->getFournisseurById($id);
-            require_once 'views/pageModifierFournisseur.php';
+            require_once VIEWS . '/pageModifierFournisseur.php';
         }
 
         // Traitement de la modification
@@ -91,14 +91,13 @@ class FournisseurController{
                     exit();
                 } catch (Exception $e) {
                     $erreur = "Erreur lors de la modification";
-                    require_once 'views/pageModifierFournisseur.php';
+                    require_once VIEWS . '/pageModifierFournisseur.php';
                 }
             } else {
                 $erreur = "Le nom de l'entreprise est obligatoire.";
-                require_once 'views/pageModifierFournisseur.php';
+                require_once VIEWS . '/pageModifierFournisseur.php';
             }
         }
-        require_once __DIR__ . '/../views/pageModifierFournisseur.php';
     }
 
     public function afficherFournisseur(){

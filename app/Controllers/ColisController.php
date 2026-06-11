@@ -17,7 +17,7 @@ class ColisController{
         // À utiliser pour les pages de suivis de colis
         $resListeColis = $this->ColisModel->getListeColisComplete();
         $fournisseursFiltre = $this->ColisModel->getFournisseursAyantColis();
-        require_once 'app/views/pageColis.php';
+        require_once VIEWS . '/pageColis.php';
     }
 
     public function modifierColis() {
@@ -49,7 +49,7 @@ class ColisController{
         }
 
         // Affichage de la vue
-        require_once 'app/views/pageModifierColis.php';
+        require_once VIEWS . '/pageModifierColis.php';
     }
 
     public function validerLivraison() {
