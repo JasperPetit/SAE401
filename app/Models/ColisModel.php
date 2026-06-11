@@ -149,5 +149,18 @@ class ColisModel {
         return $query->fetch(PDO::FETCH_ASSOC);
     }
 
+    public function getColisByStatut($statut){
+        $sql = " SELECT Colis.*, statutColis.statut
+        FROM Colis
+        JOIN statutColis USING (idStatut)
+        WHERE statutColis.statut = :statut;
+        ";
+
+        $query = $this->pdo->prepare($sql);
+        $query->execute([':statut' => $statut]);
+
+        return $query->fetchAll(PDO::FETCH_ASSOC);
+    }
+
 }
 ?>
