@@ -12,9 +12,9 @@ class FournisseurModel {
 
     public function getAllFournisseurs() {
         $sql = "SELECT f.*, c.NomCategorie
-        FROM Fournisseur
+        FROM Fournisseur f
         LEFT JOIN categorise_dans USING (IdFournisseur)
-        LEFT JOIN CategorieFournisseur USING (IdCategorie)";
+        LEFT JOIN CategorieFournisseur c USING (IdCategorie)";
 
         
         return $this->pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);

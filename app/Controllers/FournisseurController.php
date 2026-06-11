@@ -103,7 +103,7 @@ class FournisseurController{
 
     public function afficherFournisseur(){
         $resFournisseurs = $this->FournisseurModel->getAllFournisseurs();
-        require 'views/pageFournisseurs.php';
+        require VIEWS . '/pageFournisseurs.php';
     }
 }
 ?>

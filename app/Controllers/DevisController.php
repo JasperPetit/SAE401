@@ -145,7 +145,7 @@ class DevisController{
     public function afficherDevis(){
         $listeDevis = $this->DevisModel->getAllDevisDecroissant();
 
-        require_once 'views/pageInfosDevisAdmin.php';
+        require_once 'app/views/pageInfosDevisAdmin.php';
     }
 
     public function afficherDevisDepartement(){

@@ -10,7 +10,17 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
+define('ROOT', __DIR__);
+
+// 2. On définit les chemins vers les dossiers vitaux en utilisant ROOT
+define('APP', ROOT . '/app');
+define('VIEWS', ROOT . '/app/views');
+define('MODELS', ROOT . '/app/Models');
+define('CONTROLLERS', ROOT . '/app/Controllers');
+
+// --- SUITE DE VOTRE CODE ---
 // 2. Chargement de l'Autoloader pour instancier les classes automatiquement
+
 require_once __DIR__ . '/app/autoload.php';
 
 // 3. Connexion centralisée à la Base de Données (PDO)
