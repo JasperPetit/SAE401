@@ -40,7 +40,7 @@ class CommandeController{
         
             if (!empty($_FILES['ImageCommande']['name'])) {
                 $nomFichier = $_FILES['ImageCommande']['name'];
-                move_uploaded_file($_FILES['ImageCommande']['tmp_name'], "uploads/" . $nomFichier);
+                move_uploaded_file($_FILES['ImageCommande']['tmp_name'], ROOT . "/uploads/" . $nomFichier);
             }
 
             // On vérifie aussi que le fournisseur est rempli
@@ -50,23 +50,14 @@ class CommandeController{
 
                     if ($dateDepart) {
                         // Création de la commande
-                        $this->CommandeModel->addCommande($NumeroBonDeCommande, $AdresseDepart, $AdresseArivee, $dateDepart, $nbColis, $idDevis, $dateArrivee);
+                        $this->CommandeModel->addCommande($NumeroBonDeCommande, $AdresseDepart, $AdresseArivee, $dateDepart, $nbColis, $idDevis, $dateArrivee, $nomFichier);
                         
                         // Création automatique des colis
                         for ($i = 0; $i < $nbColis; $i++) {
                             $this->ColisModel->creerColis($NumeroBonDeCommande, $dateArrivee);
                         }
 
-                        // On supprime l'ancienne liaison pour ce devis s'il y en avait une (nettoyage)
-                        $stmtDel = $this->pdo->prepare("DELETE FROM Commandé_a_ WHERE idDevis = ?");
-                        $stmtDel->execute([$idDevis]);
-
-                        // On insère la nouvelle liaison
-                        $stmtAdd = $this->pdo->prepare("INSERT INTO Commandé_a_ (idDevis, idFournisseur) VALUES (?, ?)");
-                        $stmtAdd->execute([$idDevis, $idFournisseur]);
-                        // --------------------------------------
-
-                        header("Location: index.php?action=afficherCommande&sucess=1");
+                        header("Location: index.php?action=afficherCommande&success=1");
                         exit();
                     }
                 } catch (Exception $e) {
@@ -156,6 +147,20 @@ class CommandeController{
         $listeDevis = $this->DevisModel->getAllDevisDecroissant();
         $resNomEntreprise = $this->FournisseurModel->getAllFournisseurs();
         require_once VIEWS . '/pageModifierCommande.php';   
+    }
+
+    public function afficherEditionEtiquettes(){
+        $terme = $_GET['champ_recherche'] ?? '';
+        
+        if (!empty($terme)) {
+            $resultat = $this->CommandeModel->rechercherEtiquettes($terme);
+        } else {
+            // Par défaut, on affiche les 10 dernières commandes pour lesquelles on peut éditer une étiquette
+            $sql = "SELECT NumeroBonCommande, AdresseArivee, DateAjout FROM Commande ORDER BY DateAjout DESC LIMIT 10";
+            $resultat = $this->pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
+        }
+
+        require_once VIEWS . '/pageNouvelEnvoi.php';
     }
 }
 ?>

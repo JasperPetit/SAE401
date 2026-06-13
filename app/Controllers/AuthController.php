@@ -24,10 +24,12 @@ public function connecter() {
         
         if ($identifiant !== '' && $mot_de_passe !== '') {
             try {
-                $sql = "SELECT U.*, R.Role AS nomRole
+                $sql = "SELECT U.*, R.Role AS nomRole, D.NomDepartement
                         FROM Utilisateur U
                         JOIN Possede P ON U.IdUtilisateur = P.IdUtilisateur
                         JOIN Role R ON P.IdRole = R.IdRole
+                        LEFT JOIN Appartient_a A ON U.IdUtilisateur = A.IdUtilisateur
+                        LEFT JOIN Departement D ON A.IdDepartement = D.IdDepartement
                         WHERE U.Identifiant = :id
                         AND U.mdpCas = :mdp";
                         
@@ -39,6 +41,7 @@ public function connecter() {
                     $_SESSION['utilisateur_id'] = $utilisateur['IdUtilisateur'];
                     $_SESSION['nom_complet'] = $utilisateur['Prenom'] . ' ' . $utilisateur['Nom'];
                     $_SESSION['role'] = $utilisateur['nomRole'];
+                    $_SESSION['departement'] = $utilisateur['NomDepartement'];
                     
                     if ($utilisateur['nomRole'] === 'Administrateur') {
                         header('Location: index.php?action=pageAdmin');

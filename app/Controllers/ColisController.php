@@ -71,5 +71,16 @@ class ColisController{
             exit();
         }
 
+    public function imprimer() {
+        $numBon = $_GET['id'] ?? '';
+        if ($numBon) {
+            $resultat_infos = $this->ColisModel->recupereToutesLesInfosParCommandes($numBon);
+            require_once VIEWS . '/pageEtiquette.php';
+        } else {
+            header('Location: index.php?action=nouveau');
+            exit();
+        }
+    }
+
 }
 ?>

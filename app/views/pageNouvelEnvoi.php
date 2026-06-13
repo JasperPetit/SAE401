@@ -35,12 +35,12 @@
                 <tbody>
                     <?php if(!empty($resultat)): foreach ($resultat as $res): ?>
                     <tr>
-                        <td><strong><?= htmlspecialchars($res['NumeroBonDeCommande']) ?></strong></td>
+                        <td><strong><?= htmlspecialchars($res['NumeroBonCommande'] ?? '') ?></strong></td>
                         <td style="color: var(--text-muted);"><i class="fas fa-map-marker-alt"></i> <?= htmlspecialchars($res['AdresseArivee']) ?></td>
-                        <td><?= htmlspecialchars($res['Date_'] ?? '') ?></td>
+                        <td><?= htmlspecialchars($res['DateAjout'] ?? '') ?></td>
                         <td><span class="badge badge-success"><?= htmlspecialchars($res['Poids'] ?? 'N/A') ?> kg</span></td>
                         <td style="text-align: right;">
-                            <a href="index.php?action=imprimer&id=<?= htmlspecialchars($res['NumeroBonDeCommande']) ?>" target="_blank" class="btn btn-blue" style="padding: 6px 12px; font-size: 0.85rem;">
+                            <a href="index.php?action=imprimer&id=<?= htmlspecialchars($res['NumeroBonCommande'] ?? '') ?>" target="_blank" class="btn btn-blue" style="padding: 6px 12px; font-size: 0.85rem;">
                                 <i class="fas fa-print"></i> Imprimer
                             </a>
                         </td>

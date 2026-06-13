@@ -49,7 +49,7 @@ class devisModel {
     }
 
     public function addDevis($numeroDevis, $date, $imageDevis, $prix, $idUtilisateur, $idFournisseur) {
-        //On ajoute idStatut directement a 0 car un devis sera automoatiquement ajouter en "non signé".
+        //On ajoute idStatut directement a 1 car un devis sera automoatiquement ajouter en "en attente".
             $sql = "INSERT INTO Devis (numeroDevis, Date_, ImageDevis, Prix, IdStatut, IdUtilisateur, IdFournisseur) 
                     VALUES (:numeroDevis, :date_, :imageDevis, :prix, :idStatut, :idUtilisateur, :idFournisseur)";
             
@@ -60,7 +60,7 @@ class devisModel {
                 ':date_'          => $date, 
                 ':imageDevis'    => $imageDevis, 
                 ':prix'          => $prix, 
-                ':idStatut'      => 0, 
+                ':idStatut'      => 1, 
                 ':idUtilisateur' => $idUtilisateur, 
                 ':idFournisseur' => $idFournisseur
             ]);
@@ -108,7 +108,9 @@ class devisModel {
     }
 
     public function getDevisDepartement($dep){
-        $sql = "SELECT d.*, sd.Statut AS StatutDevis, u.Nom AS NomUtilisateur, u.Prenom AS PrenomUtilisateur, dep.NomDepartement, f.NomFournisseur
+        $sql = "SELECT d.IdDevis, d.numeroDevis, d.Date_, d.ImageDevis, d.Prix, d.IdStatut,
+                       sd.Statut AS StatutDevis, u.Nom AS NomUtilisateur, u.Prenom AS PrenomUtilisateur, 
+                       dep.NomDepartement, f.NomFournisseur
                 FROM Devis d
                 INNER JOIN Utilisateur u ON d.IdUtilisateur = u.IdUtilisateur
                 INNER JOIN Fournisseur f ON d.IdFournisseur = f.IdFournisseur

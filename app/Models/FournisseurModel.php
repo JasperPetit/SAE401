@@ -21,24 +21,24 @@ class FournisseurModel {
     }
 
     public function deleteFournisseur( $id) {
-        $sql = "DELETE FROM Fournisseur WHERE idFournisseur = :Id";
+        $sql = "DELETE FROM Fournisseur WHERE IdFournisseur = :Id";
 
         $stmt = $this->pdo->prepare($sql);
 
-        return $stmt->execute([':IdDevis' => $Id]);
+        return $stmt->execute([':Id' => $id]);
     }
 
     public function getFournisseurById($id){
         $sql = "SELECT f.*, c.NomCategorie
-            FROM Fournisseur
+            FROM Fournisseur f
             LEFT JOIN categorise_dans USING (IdFournisseur)
-            LEFT JOIN CategorieFournisseur USING (IdCategorie)
-            WHERE IdFournisseur = :id";
+            LEFT JOIN CategorieFournisseur c USING (IdCategorie)
+            WHERE f.IdFournisseur = :id";
 
         $query = $this->pdo->prepare($sql);
         $query->execute([':id' => $id]);
 
-        return $query->fetchAll(PDO::FETCH_ASSOC);
+        return $query->fetch(PDO::FETCH_ASSOC);
     }
 
     public function addFournisseur($nomFournisseur, $adresse, $numeroTelephone, $mail) {

@@ -42,11 +42,10 @@
                     <label for="role">Rôle principal :</label>
                     <select id="role" name="Role[]" class="form-control" onchange="afficherDepartement()" required>
                         <option value="">-- Sélectionnez un rôle --</option>
-                        <option value="ADMIN">Administrateur</option>
-                        <option value="Demandeur">Demandeur (Professeur / Département)</option>
-                        <option value="Service_Postal">Service Postal (Logistique)</option>
-                        <option value="Service_Financier">Service Financier</option>
-                        <option value="Direction">Direction</option>
+                        <option value="1">Administrateur</option>
+                        <option value="4">Demandeur (Professeur / Département)</option>
+                        <option value="3">Service Postal (Logistique)</option>
+                        <option value="2">Service Financier</option>
                     </select>
                 </div>
 
@@ -85,7 +84,7 @@
             var divDepartement = document.getElementById("div-departement");
             var selectDepartement = document.getElementById("departement");
 
-            if (roleSelect.value === "Demandeur") {
+            if (roleSelect.value === "4") {
                 divDepartement.style.display = "block";
                 selectDepartement.required = true;
             } else {

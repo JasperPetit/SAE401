@@ -26,14 +26,14 @@
                         
                         <div class="commande-info" style="flex: 1; min-width: 300px;">
                             <h3 style="color: var(--primary-blue); font-size: 1.15rem; font-weight: bold; margin-bottom: 8px;">
-                                <?= htmlspecialchars($devi['name'] ?? 'Devis n°'.$devi['idDevis']) ?>
+                                <?= htmlspecialchars($devi['numeroDevis'] ?? 'Devis n°'.$devi['IdDevis']) ?>
                             </h3>
                             <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 5px;">
-                                <i class="fas fa-hashtag"></i> Réf : <?= htmlspecialchars($devi['idDevis'] ?? 'N/A') ?> | 
-                                <i class="fas fa-building"></i> Fournisseur : <strong><?= htmlspecialchars($devi['nomEntreprise'] ?? 'Non spécifié') ?></strong>
+                                <i class="fas fa-hashtag"></i> Réf : <?= htmlspecialchars($devi['IdDevis'] ?? 'N/A') ?> | 
+                                <i class="fas fa-building"></i> Fournisseur : <strong><?= htmlspecialchars($devi['NomFournisseur'] ?? 'Non spécifié') ?></strong>
                             </p>
                             <p style="font-size: 0.95rem; color: var(--text-dark);">
-                                Estimation : <strong><?= htmlspecialchars($devi['prix'] ?? '0') ?> €</strong> 
+                                Estimation : <strong><?= htmlspecialchars($devi['Prix'] ?? '0') ?> €</strong> 
                                 <span style="color: var(--text-muted); margin-left: 15px;"><i class="far fa-calendar-alt"></i> <?= htmlspecialchars($devi['Date_'] ?? 'Inconnue') ?></span>
                             </p>
                         </div>
@@ -49,20 +49,20 @@
                             <span class="badge <?= $badgeClass ?>"><?= htmlspecialchars($statut) ?></span>
                             
                             <div style="display: flex; gap: 8px;">
-                                <?php if (!empty($devi['imageDevis'])): ?>
-                                    <a href="uploads/<?= htmlspecialchars($devi['imageDevis']) ?>" target="_blank" class="btn btn-blue" style="padding: 6px 12px; font-size: 0.8rem;">
+                                <?php if (!empty($devi['ImageDevis'])): ?>
+                                    <a href="uploads/<?= htmlspecialchars($devi['ImageDevis']) ?>" target="_blank" class="btn btn-blue" style="padding: 6px 12px; font-size: 0.8rem;">
                                         <i class="fas fa-file-pdf"></i> PDF
                                     </a>
                                 <?php endif; ?>
-                                <button onclick="toggleDetails(<?= htmlspecialchars($devi['idDevis']) ?>)" class="btn btn-blue" style="padding: 6px 12px; font-size: 0.8rem; background-color: var(--secondary-blue);">
+                                <button onclick="toggleDetails(<?= htmlspecialchars($devi['IdDevis']) ?>)" class="btn btn-blue" style="padding: 6px 12px; font-size: 0.8rem; background-color: var(--secondary-blue);">
                                     <i class="fas fa-eye"></i> Détails
                                 </button>
                             </div>
                         </div>
                         
-                        <div id="details-<?= htmlspecialchars($devi['idDevis']) ?>" style="display: none; width: 100%; margin-top: 15px; padding-top: 15px; border-top: 1px solid var(--border-color); color: var(--text-dark);">
-                            <strong>Description du besoin :</strong><br>
-                            <?= nl2br(htmlspecialchars($devi['details'] ?? 'Aucun détail fourni.')) ?>
+                        <div id="details-<?= htmlspecialchars($devi['IdDevis']) ?>" style="display: none; width: 100%; margin-top: 15px; padding-top: 15px; border-top: 1px solid var(--border-color); color: var(--text-dark);">
+                            <strong>Référence complète :</strong> <?= htmlspecialchars($devi['numeroDevis'] ?? 'N/A') ?><br>
+                            <strong>Date de dépôt :</strong> <?= htmlspecialchars($devi['Date_'] ?? 'Non renseignée') ?>
                         </div>
 
                     </div>

@@ -52,7 +52,7 @@
                         <option value="">-- Sélectionnez un fournisseur --</option>
                         <?php if (!empty($resFournisseurs)): ?>
                             <?php foreach ($resFournisseurs as $entreprise): ?>
-                                <option value="<?= htmlspecialchars($entreprise['idFournisseur']) ?>"><?= htmlspecialchars($entreprise['nomEntreprise']) ?></option>
+                                <option value="<?= htmlspecialchars($entreprise['IdFournisseur']) ?>"><?= htmlspecialchars($entreprise['NomFournisseur']) ?></option>
                             <?php endforeach; ?>
                         <?php endif; ?>
                     </select>
