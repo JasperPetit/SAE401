@@ -1,7 +1,7 @@
 <?php 
 namespace App\Controllers;
 
-use App\Models\DevisService as ModelsDevisService;
+use App\Models\DevisModel as ModelsDevisModel;
 use App\Models\FournisseurModel;
 use PDO;
 use PDOException;
@@ -10,28 +10,43 @@ use Exception;
 class DevisController{
     
     private $pdo;
-    //  Vérifier si DevisService existe encore
-    private $DevisService;
+    private $DevisModel;
     private $FournisseurModel;
 
     public function __construct($db)
     {
         $this->pdo = $db;
-        $this->DevisService = new ModelsDevisService($db);
+        $this->DevisModel = new ModelsDevisModel($db);
         $this->FournisseurModel = new FournisseurModel($db);
     }
 
     public function ajouterDevis(){
 
         try{
-        $this->DevisService->ajouterDevis($_POST,$_FILES,$_SESSION);
-        if ($_SESSION['role']=='ADMIN'){
-            header('Location: pageInfosDevis?success=1');
-        }
-        elseif ($_SESSION['role']=='Demandeur'){
-            header('Location: PageInfosDevisDemandeur');
-        }
-        exit();
+            $nomFichier = "";
+            if (!empty($_FILES['ImageDevis']['name'])) {
+                $nomFichier = $_FILES['ImageDevis']['name'];
+                move_uploaded_file($_FILES['ImageDevis']['tmp_name'], "uploads/" . $nomFichier);
+            }
+
+            $this->DevisModel->addDevis(
+                $_POST['NumeroDevis'] ?? '',
+                date('Y-m-d'),
+                $nomFichier,
+                $_POST['prix'] ?? 0,
+                $_SESSION['idUtilisateur'] ?? 1, // Par défaut 1 si non connecté (à ajuster)
+                $_POST['idFournisseur'] ?? ''
+            );
+
+            if (isset($_SESSION['role']) && $_SESSION['role']=='ADMIN'){
+                header('Location: pageInfosDevis?success=1');
+            }
+            elseif (isset($_SESSION['role']) && $_SESSION['role']=='Demandeur'){
+                header('Location: PageInfosDevisDemandeur');
+            } else {
+                header('Location: pageInfosDevis?success=1');
+            }
+            exit();
         }
         catch (PDOException $e){
             if($e->getCode() == '23000'){
@@ -53,7 +68,7 @@ class DevisController{
 
             if (!empty($idDevis)) {
                 try {
-                    $this->DevisService->supprimerDevis($idDevis);
+                    $this->DevisModel->deleteDevis($idDevis);
                     header("Location: pageInfosDevis?success=suppression");
                     exit();
                 } catch (Exception $e) {
@@ -86,34 +101,29 @@ class DevisController{
         }
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST'){
-            $nomFichier = $devi['ImageDevis'];
+            $nomFichier = $devi['ImageDevis'] ?? '';
             if (!empty($_FILES['ImageDevis']['name'])) {
                 $nomFichier = $_FILES['ImageDevis']['name'];
             
                 // On le déplace directement dans le dossier "uploads"
-             // ATTENTION : Le dossier "uploads" doit exister physiquement !
                 move_uploaded_file($_FILES['ImageDevis']['tmp_name'], "uploads/" . $nomFichier);
-                }
-            $tab = [
-            'name' => $_POST['name'],
-            'prix' => $_POST['prix'],
-            'idFournisseur' => $_POST['idFournisseur'],
-            'details' => $_POST['details'],
-            'nomFichier' => $nomFichier,
+            }
 
-            'signatureParDefaut' => $devi['SignatureOuiOuNon'],
-            'idDevi' => $devi['idDevis']
-            ];
-        
             if (!empty($_POST['idDevis'])) {
                 try {
-                    $success = $this->DevisService->modifierDevis($tab);
+                    $success = $this->DevisModel->updateDevis(
+                        $_POST['idDevis'],
+                        $_POST['NumeroDevis'] ?? $devi['numeroDevis'],
+                        $devi['Date_'], // On garde la date d'origine ou on met date('Y-m-d') ?
+                        $nomFichier,
+                        $_POST['prix'] ?? $devi['Prix'],
+                        $_POST['idStatut'] ?? $devi['IdStatut'],
+                        $_SESSION['idUtilisateur'] ?? $devi['IdUtilisateur'],
+                        $_POST['idFournisseur'] ?? $devi['IdFournisseur']
+                    );
                 
                     if ($success) {
-                        
                         header("Location: pageInfosDevis");
-                        
-
                         exit();
                     } else {
                         $erreur = "La mise à jour a échoué.";
@@ -125,7 +135,7 @@ class DevisController{
             } else {
                 $erreur = "Veuillez remplir les champs obligatoires.";
             }
-            }
+        }
         $resFournisseurs = $this->FournisseurModel->getAllFournisseurs();
         
         require_once __DIR__ . '/../views/pageModifierDevis.php';
@@ -133,13 +143,13 @@ class DevisController{
    }
 
     public function afficherDevis(){
-        $listeDevis = $this->DevisService->getAllDevis();
+        $listeDevis = $this->DevisModel->getAllDevisDecroissant();
 
         require_once 'views/pageInfosDevisAdmin.php';
     }
 
     public function afficherDevisDepartement(){
-        $listeDevis = $this->DevisService->getDevisDepartement();
+        $listeDevis = $this->DevisModel->getDevisDepartement($_SESSION['departement'] ?? '');
 
         require_once 'views/pageInfosDevis.php';
     }

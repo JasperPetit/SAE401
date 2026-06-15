@@ -1,7 +1,7 @@
 <?php
 namespace App\Controllers;
 use App\Models\CommandeModel;
-use App\Models\DevisService as ModelsDevisService;
+use App\Models\DevisModel as ModelsDevisModel;
 use App\Models\FournisseurModel;
 use App\Models\ColisModel;
 
@@ -12,7 +12,7 @@ class CommandeController{
 
     private $pdo;
     private $CommandeModel;
-    private $DevisService;
+    private $DevisModel;
     private $FournisseurModel;
     private $ColisModel; 
 
@@ -20,7 +20,7 @@ class CommandeController{
     {
         $this->pdo = $db;
         $this->CommandeModel = new CommandeModel($db);
-        $this->DevisService = new ModelsDevisService($db);
+        $this->DevisModel = new ModelsDevisModel($db);
         $this->FournisseurModel = new FournisseurModel($db);
         $this->ColisModel = new ColisModel($db); 
     }
@@ -50,7 +50,7 @@ class CommandeController{
 
                     if ($dateDepart) {
                         // Création de la commande
-                        $this->CommandeModel->ajouterCommande($NumeroBonDeCommande, $AdresseDepart, $AdresseArivee, $dateDepart, $nbColis, $idDevis, $dateArrivee);
+                        $this->CommandeModel->addCommande($NumeroBonDeCommande, $AdresseDepart, $AdresseArivee, $dateDepart, $nbColis, $idDevis, $dateArrivee);
                         
                         // Création automatique des colis
                         for ($i = 0; $i < $nbColis; $i++) {
@@ -80,7 +80,7 @@ class CommandeController{
                 $erreur = "Veuillez remplir tous les champs, y compris le fournisseur.";
             }
         }
-        $listeDevis = $this->DevisService->getAllDevis();   
+        $listeDevis = $this->DevisModel->getAllDevisDecroissant();   
         $resNomEntreprise = $this->FournisseurModel->getAllFournisseurs();
 
         require_once 'views/pageAjouterCommande.php';
@@ -88,7 +88,7 @@ class CommandeController{
 
     public function afficherCommandes(){
         $resListeCommandes = $this->CommandeModel->getListeCommandesCompletes();
-        $idDevis = $this->DevisService->RecupererIdDevis();
+        $idDevis = $this->DevisModel->RecupererIdDevis();
         $resNomEntreprise = $this->FournisseurModel->getAllFournisseurs($this->pdo);
 
         if(isset($_SESSION['role']) && $_SESSION['role'] === 'ADMIN'){
@@ -143,7 +143,7 @@ class CommandeController{
 
             if (!empty($NumeroBonDeCommande) && !empty($idDevis) && !empty($AdresseArivee)) {
                 try {
-                    $success = $this->CommandeModel->modifierCommande( $NumeroBonDeCommande, $AdresseDepart, $AdresseArivee, $nbColis, $idDevis, $dateArrivee);
+                    $success = $this->CommandeModel->updateCommande( $NumeroBonDeCommande, $AdresseDepart, $AdresseArivee, $nbColis, $idDevis, $dateArrivee);
 
                     if ($success) {
                         header("Location: afficherCommande");
@@ -159,7 +159,7 @@ class CommandeController{
             }
         }
 
-        $listeDevis = $this->DevisService->getAllDevis();
+        $listeDevis = $this->DevisModel->getAllDevisDecroissant();
         $resNomEntreprise = $this->FournisseurModel->getAllFournisseurs();
         require_once __DIR__ . '/../views/pageModifierCommande.php';   
     }

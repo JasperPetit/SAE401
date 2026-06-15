@@ -2,17 +2,20 @@
 namespace App\Controllers;
 
 use App\Models\UtilisateurModel;
+use App\Models\DepartementModel;
 use Exception;
 
 class UtilisateurController{
 
     private $pdo;
     private $UtilisateurModel;
+    private $DepartementModel;
 
     public function __construct($db)
     {
         $this->pdo = $db;
         $this->UtilisateurModel = new UtilisateurModel($db);
+        $this->DepartementModel = new DepartementModel($db);
     }
 
     public function supprimerUtilisateur(){
@@ -64,7 +67,7 @@ class UtilisateurController{
                 $erreur = "Veuillez remplir tous les champs !";
             }
         }
-        $ListeDepartement = $this->UtilisateurModel->getAllDepartements();
+        $ListeDepartement = $this->DepartementModel->getAllDepartements();
         require_once __DIR__ . '/../views/pageAjouterUtilisateur.php';
     }
 
