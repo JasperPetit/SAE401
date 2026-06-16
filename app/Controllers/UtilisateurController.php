@@ -68,18 +68,18 @@ class UtilisateurController{
             }
         }
         $ListeDepartement = $this->DepartementModel->getAllDepartements();
-        require_once __DIR__ . '/../views/pageAjouterUtilisateur.php';
+        require_once VIEWS . '/pageAjouterUtilisateur.php';
     }
 
     // À SUPPRIMER PEUT ETRE IL FAUT VOIR SI C'EST VRAIMENT NÉCESSAIRE
     public function afficherAdmin(){
-        require_once __DIR__ . '/../views/pageAdmin.php';
+        require_once VIEWS . '/pageAdmin.php';
     }
 
     // À SUPPRIMER PEUT ETRE IL FAUT VOIR SI C'EST VRAIMENT NÉCESSAIRE
     public function afficherListe() {
         $resListeUtilisateurs = $this->UtilisateurModel->getAllUtilisateurs();
-        require_once __DIR__ . '/../views/pageVoirUtilisateurs.php';
+        require_once VIEWS . '/pageVoirUtilisateurs.php';
     }
 }
 ?>

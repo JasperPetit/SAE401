@@ -26,7 +26,7 @@ class DevisController{
             $nomFichier = "";
             if (!empty($_FILES['ImageDevis']['name'])) {
                 $nomFichier = $_FILES['ImageDevis']['name'];
-                move_uploaded_file($_FILES['ImageDevis']['tmp_name'], "uploads/" . $nomFichier);
+                move_uploaded_file($_FILES['ImageDevis']['tmp_name'], ROOT . "/uploads/" . $nomFichier);
             }
 
             $this->DevisModel->addDevis(
@@ -34,17 +34,17 @@ class DevisController{
                 date('Y-m-d'),
                 $nomFichier,
                 $_POST['prix'] ?? 0,
-                $_SESSION['idUtilisateur'] ?? 1, // Par défaut 1 si non connecté (à ajuster)
+                $_SESSION['utilisateur_id'] ?? 1,
                 $_POST['idFournisseur'] ?? ''
             );
 
-            if (isset($_SESSION['role']) && $_SESSION['role']=='ADMIN'){
-                header('Location: pageInfosDevis?success=1');
+            if (isset($_SESSION['role']) && $_SESSION['role']=='Administrateur'){
+                header('Location: index.php?action=pageInfosDevis&success=1');
             }
             elseif (isset($_SESSION['role']) && $_SESSION['role']=='Demandeur'){
                 header('Location: PageInfosDevisDemandeur');
             } else {
-                header('Location: pageInfosDevis?success=1');
+                header('Location: index.php?action=pageInfosDevis&success=1');
             }
             exit();
         }
@@ -106,7 +106,7 @@ class DevisController{
                 $nomFichier = $_FILES['ImageDevis']['name'];
             
                 // On le déplace directement dans le dossier "uploads"
-                move_uploaded_file($_FILES['ImageDevis']['tmp_name'], "uploads/" . $nomFichier);
+                move_uploaded_file($_FILES['ImageDevis']['tmp_name'], ROOT . "/uploads/" . $nomFichier);
             }
 
             if (!empty($_POST['idDevis'])) {
@@ -138,35 +138,55 @@ class DevisController{
         }
         $resFournisseurs = $this->FournisseurModel->getAllFournisseurs();
         
-        require_once __DIR__ . '/../views/pageModifierDevis.php';
+        require_once VIEWS . '/pageModifierDevis.php';
 
    }
 
     public function afficherDevis(){
         $listeDevis = $this->DevisModel->getAllDevisDecroissant();
 
-        require_once 'views/pageInfosDevisAdmin.php';
+        if (isset($_SESSION['role']) && $_SESSION['role'] === 'Service_Financier') {
+            require_once VIEWS . '/PageServiceFinancierDevis.php';
+        } else {
+            require_once VIEWS . '/pageInfosDevisAdmin.php';
+        }
     }
 
     public function afficherDevisDepartement(){
-        $listeDevis = $this->DevisModel->getDevisDepartement($_SESSION['departement'] ?? '');
+        $departement = $_SESSION['departement'] ?? '';
+        
+        // Si le département est manquant dans la session, on essaie de le récupérer en base
+        if (empty($departement) && isset($_SESSION['utilisateur_id'])) {
+            $stmt = $this->pdo->prepare("SELECT D.NomDepartement 
+                                        FROM Departement D
+                                        JOIN Appartient_a A ON D.IdDepartement = A.IdDepartement
+                                        WHERE A.IdUtilisateur = ?");
+            $stmt->execute([$_SESSION['utilisateur_id']]);
+            $res = $stmt->fetch(PDO::FETCH_ASSOC);
+            if ($res) {
+                $departement = $res['NomDepartement'];
+                $_SESSION['departement'] = $departement; // On le met en session pour la suite
+            }
+        }
 
-        require_once 'views/pageInfosDevis.php';
+        $listeDevis = $this->DevisModel->getDevisDepartement($departement);
+
+        require_once VIEWS . '/pageInfosDevis.php';
     }
 
     public function afficherFormulaire(){
         $resFournisseurs = $this->FournisseurModel->getAllFournisseurs();
-        require_once 'views/pageAjoutDevis.php';
+        require_once VIEWS . '/pageAjoutDevis.php';
     }
 
     // Action : Valider un devis
     public function validerDevis() {
         if (isset($_GET['id'])) {
             $idDevis = $_GET['id'];
-            $this->financeModel->updateStatutDevis($idDevis, 1); // 1 = Accepté
+            $this->DevisModel->updateStatutDevis($idDevis, 2); // 2 = Validé
         }
         // Redirection vers la liste
-        header('Location: pageServiceFinancierDevis');
+        header('Location: index.php?action=pageInfosDevis');
         exit();
     }
 
@@ -174,10 +194,10 @@ class DevisController{
     public function refuserDevis() {
         if (isset($_GET['id'])) {
             $idDevis = $_GET['id'];
-            $this->financeModel->updateStatutDevis($idDevis, 0); // 0 = Refusé
+            $this->DevisModel->updateStatutDevis($idDevis, 3); // 3 = Refusé
         }
         // Redirection vers la liste
-        header('Location: pageServiceFinancierDevis');
+        header('Location: index.php?action=pageInfosDevis');
         exit();
     }
 }

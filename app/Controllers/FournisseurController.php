@@ -29,16 +29,16 @@ class FournisseurController{
                     $this->FournisseurModel->addFournisseur($nomEntreprise, $adresse, $NumeroTelephone, $Mail);
 
                     // Redirection vers la liste après succès
-                    header("Location: afficherFournisseur");
+                    header("Location: index.php?action=afficherFournisseur");
                     exit();
                 } catch (Exception $e) {
                     $_SESSION['error'] = "Erreur lors de l'ajout";
-                    header('Location: ajouterFournisseur');
+                    header('Location: index.php?action=ajouterFournisseur');
                     exit();
                 }
             }
         }
-        require_once 'views/pageAjouterFournisseur.php';
+        require_once VIEWS . '/pageAjouterFournisseur.php';
     }
 
     public function supprimerFournisseur(){
@@ -49,11 +49,11 @@ class FournisseurController{
                 try {
                     $this->FournisseurModel->deleteFournisseur($id_fournisseur);
                     $_SESSION['success'] = 'Le fournisseur a été supprimé avec succès.';
-                    header('Location: afficherFournisseur');
+                    header('Location: index.php?action=afficherFournisseur');
                     exit();
                 } catch (Exception $e) {
                     $_SESSION['error'] = 'Impossible de supprimer ce fournisseur car il est lié à des commandes.';
-                    header('Location: afficherFournisseur');
+                    header('Location: index.php?action=afficherFournisseur');
                     exit();
                 }
             }
@@ -61,22 +61,15 @@ class FournisseurController{
 
         // Récupération pour affichage (uniquement en GET)
         $resFournisseurs = $this->FournisseurModel->getAllFournisseurs();
-        return $resFournisseurs; // ou include de la vue
-        }
+        return $resFournisseurs; 
+    }
 
 
     public function modifierFournisseur(){
         $erreur = null;
         $fournisseur = null;
 
-        // On récupère les infos du fournisseur si l'ID est dans l'URL
-        if (isset($_GET['modifier'])) {
-            $id = $_GET['modifier'];
-            $fournisseur = $this->FournisseurModel->getFournisseurById($id);
-            require_once 'views/pageModifierFournisseur.php';
-        }
-
-        // Traitement de la modification
+        // 1. Traitement de la modification (POST)
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $id = $_POST['idFournisseur'] ?? '';
             $nom = $_POST['nomEntreprise'] ?? '';
@@ -86,24 +79,35 @@ class FournisseurController{
 
             if (!empty($id) && !empty($nom)) {
                 try {
-                    $this->FournisseurModel->updateFournisseur( $id, $nom, $adresse, $tel, $mail);
-                    header("Location: afficherFournisseur");
+                    $this->FournisseurModel->updateFournisseur($id, $nom, $adresse, $tel, $mail);
+                    header("Location: index.php?action=afficherFournisseur");
                     exit();
                 } catch (Exception $e) {
-                    $erreur = "Erreur lors de la modification";
-                    require_once 'views/pageModifierFournisseur.php';
+                    $erreur = "Erreur lors de la modification : " . $e->getMessage();
                 }
             } else {
                 $erreur = "Le nom de l'entreprise est obligatoire.";
-                require_once 'views/pageModifierFournisseur.php';
             }
         }
-        require_once __DIR__ . '/../views/pageModifierFournisseur.php';
+
+        // 2. Affichage du formulaire (GET ou après erreur POST)
+        $id = $_GET['modifier'] ?? ($_POST['idFournisseur'] ?? null);
+        if ($id) {
+            $fournisseur = $this->FournisseurModel->getFournisseurById($id);
+            if (!$fournisseur) {
+                header("Location: index.php?action=afficherFournisseur");
+                exit();
+            }
+            require_once VIEWS . '/pageModifierFournisseur.php';
+        } else {
+            header("Location: index.php?action=afficherFournisseur");
+            exit();
+        }
     }
 
     public function afficherFournisseur(){
         $resFournisseurs = $this->FournisseurModel->getAllFournisseurs();
-        require 'views/pageFournisseurs.php';
+        require VIEWS . '/pageFournisseurs.php';
     }
 }
 ?>
