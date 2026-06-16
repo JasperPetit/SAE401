@@ -30,55 +30,59 @@ class utilisateurModel {
     }
 
     function ajouterUtilisateur($prenom, $nom, $roles, $mdp, $departements){
-        //On utilise une transaction car on fait plusieurs insert en meme temps
-        // roles et departements sont des tableau qui contiennent la liste des roles et des departement a associé a l'utilisateur. Si le user n'a pas de departement alors la variable est un tableau vide. 
-        // Si il y a un seul role ou departement mettre quand meme dans un tableau.
         try {
+            // Génération automatique de l'identifiant CAS (ex: amartin pour Alice Martin)
+            $identifiant = strtolower(substr($prenom, 0, 1) . str_replace(' ', '', $nom));
+
             $this->pdo->beginTransaction();
-            $sqlUser = "INSERT INTO Utilisateur(Nom, Prenom, mdpCAS, Identifiant)
+            $sqlUser = "INSERT INTO Utilisateur(Nom, Prenom, mdpCas, Identifiant)
                         VALUES (:nom,:prenom,:mdp,:id)";
 
-
             $stmt = $this->pdo->prepare($sqlUser);
-
             $stmt->execute([
                 ':nom' => $nom,
                 ':prenom' => $prenom,
                 ':mdp' => $mdp,
-                ':id' => $Identifiant
+                ':id' => $identifiant
             ]);
 
-            foreach ($roles as $role) {
-                $sqlRole = "INSERT INTO Possede(IdUtilisateur,IdRole)
-                            VALUES(:id,:idrole)";
-                $stmt = $this->pdo->prepare($sqlRole);
+            // Récupérer l'ID auto-incrémenté créé par SQLite
+            $idUtilisateur = $this->pdo->lastInsertId();
 
-                $stmt->execute([
-                    ':id' => $Identifiant,
-                    ':idrole' => $role
-                ]);
+            if (!empty($roles)) {
+                if (!is_array($roles)) $roles = [$roles];
+                foreach ($roles as $role) {
+                    $sqlRole = "INSERT INTO Possede(IdUtilisateur,IdRole)
+                                VALUES(:id,:idrole)";
+                    $stmt = $this->pdo->prepare($sqlRole);
+                    $stmt->execute([
+                        ':id' => $idUtilisateur,
+                        ':idrole' => $role
+                    ]);
+                }
             }
 
-            foreach ($departements as $dep) {
-                $sqlDep = "INSERT INTO Appartient_a(IdUtilisateur,IdDepartement)
-                            VALUES(:id,:iddep)";
-                $stmt = $this->pdo->prepare($sqlDep);
-
-                $stmt->execute([
-                    ':id' => $Identifiant,
-                    ':iddep' => $dep
-                ]);
+            if (!empty($departements)) {
+                if (!is_array($departements)) $departements = [$departements];
+                foreach ($departements as $dep) {
+                    if (!empty($dep)) {
+                        $sqlDep = "INSERT INTO Appartient_a(IdUtilisateur,IdDepartement)
+                                    VALUES(:id,:iddep)";
+                        $stmt = $this->pdo->prepare($sqlDep);
+                        $stmt->execute([
+                            ':id' => $idUtilisateur,
+                            ':iddep' => $dep
+                        ]);
+                    }
+                }
             }
 
             $this->pdo->commit();
             return true;
-        }catch (\PDOException $e) {
+        } catch (\PDOException $e) {
             $this->pdo->rollBack();
-            
-            
-            return false;
+            throw $e;
         }
-    
     }
 
 

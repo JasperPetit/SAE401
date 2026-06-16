@@ -44,10 +44,10 @@
                             }
                         ?>
                         <tr class="colis-row">
-                            <td><strong><?= htmlspecialchars($colis['NumeroBonDeCommande'] ?? '') ?></strong></td>
+                            <td><strong><?= htmlspecialchars($colis['NumeroBonCommande'] ?? '') ?></strong></td>
                             <td style="color: var(--text-muted);"><?= htmlspecialchars($colis['Prenom'] ?? '') . ' ' . htmlspecialchars($colis['Nom'] ?? '') ?></td>
                             <td><i class="fas fa-location-dot" style="color: var(--primary-blue);"></i> <?= htmlspecialchars($colis['AdresseArivee'] ?? '') ?></td>
-                            <td><?= htmlspecialchars($colis['nomDepartement'] ?? '') ?></td>
+                            <td><?= htmlspecialchars($colis['NomDepartement'] ?? '') ?></td>
                             <td><?= htmlspecialchars($colis['Date_'] ?? '') ?></td>
                             <td><span class="badge <?= $classe_badge ?>"><?= $statut_texte ?></span></td>
                         </tr>

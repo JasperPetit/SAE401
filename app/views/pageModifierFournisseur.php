@@ -23,7 +23,7 @@
 
     <main class="main-content">
         <div class="content-header">
-            <h1><i class="fas fa-edit"></i> Modifier : <?= htmlspecialchars($fournisseur['nomEntreprise'] ?? '') ?></h1>
+            <h1><i class="fas fa-edit"></i> Modifier : <?= htmlspecialchars($fournisseur['NomFournisseur'] ?? '') ?></h1>
         </div>
 
         <?php if (!empty($erreur)): ?>
@@ -33,22 +33,22 @@
         <?php endif; ?>
 
         <div class="data-card-container" style="padding: 30px;">
-            <form action="index.php?action=ModifierFournisseur&modifier=<?= $fournisseur['idFournisseur'] ?>" method="POST">
-                <input type="hidden" name="idFournisseur" value="<?= $fournisseur['idFournisseur'] ?>">
+            <form action="index.php?action=ModifierFournisseur&modifier=<?= $fournisseur['IdFournisseur'] ?>" method="POST">
+                <input type="hidden" name="idFournisseur" value="<?= $fournisseur['IdFournisseur'] ?>">
         
                 <div class="form-group">
                     <label for="nom_entreprise">Nom de l'entreprise :</label>
-                    <input type="text" id="nom_entreprise" name="nomEntreprise" class="form-control" value="<?= htmlspecialchars($fournisseur['nomEntreprise'] ?? '') ?>" required>
+                    <input type="text" id="nom_entreprise" name="nomEntreprise" class="form-control" value="<?= htmlspecialchars($fournisseur['NomFournisseur'] ?? '') ?>" required>
                 </div>
 
                 <div class="form-group">
                     <label for="adresse">Adresse :</label>
-                    <input type="text" id="adresse" name="adresse" class="form-control" value="<?= htmlspecialchars($fournisseur['adresse'] ?? '') ?>" required>
+                    <input type="text" id="adresse" name="adresse" class="form-control" value="<?= htmlspecialchars($fournisseur['Adresse'] ?? '') ?>" required>
                 </div>
 
                 <div class="form-group">
                     <label for="num_telephone">Numéro de téléphone :</label>
-                    <input type="text" id="num_telephone" name="NumeroTelephone" class="form-control" value="<?= htmlspecialchars($fournisseur['NumeroTelephone'] ?? '') ?>" required>
+                    <input type="text" id="num_telephone" name="NumeroTelephone" class="form-control" value="<?= htmlspecialchars($fournisseur['numeroTelephone'] ?? '') ?>" required>
                 </div>
 
                 <div class="form-group">

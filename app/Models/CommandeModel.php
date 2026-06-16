@@ -34,10 +34,11 @@ class CommandeModel {
     }
 
     public function getListeCommandesCompletes() {
-        $sql = "SELECT C.*, F.NomFournisseur, De.Date_ AS DateDepart
+        $sql = "SELECT C.*, F.NomFournisseur, De.Date_ AS DateDepart, sc.Statut
                 FROM Commande C
                 INNER JOIN Devis De ON C.IdDevis = De.IdDevis
                 JOIN Fournisseur F ON De.IdFournisseur = F.IdFournisseur
+                JOIN StatutCommande sc ON C.IdStatut = sc.IdStatut
                 ORDER BY De.Date_ DESC";
         return $this->pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
     }
@@ -56,14 +57,14 @@ class CommandeModel {
         return $resultat_infos->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function getToutesLesCommandesParUtilisateur($identifiant_cas) {
-        $sql = "SELECT C.*, De.Prix
+    public function getToutesLesCommandesParUtilisateur($id_utilisateur) {
+        $sql = "SELECT C.*, De.Prix, sc.Statut
                 FROM Commande C
                 INNER JOIN Devis De ON C.IdDevis = De.IdDevis
-                INNER JOIN Utilisateur U ON De.IdUtilisateur = U.IdUtilisateur
-                WHERE U.Identifiant = :cas";
+                INNER JOIN StatutCommande sc ON C.IdStatut = sc.IdStatut
+                WHERE De.IdUtilisateur = :id";
         $stmt = $this->pdo->prepare($sql);
-        $stmt->execute([':cas' => $identifiant_cas]);
+        $stmt->execute([':id' => $id_utilisateur]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
@@ -91,11 +92,11 @@ class CommandeModel {
         return $query->execute([$numeroBonCommande]);
     }
 
-    public function addCommande($numero, $adresseDepart, $adresseArivee, $dateDepartDossier, $nbColis, $IdDevis, $dateArriveeSaisie) {
-        $sql = "INSERT INTO Commande (NumeroBonCommande, AdresseDepart, AdresseArivee, DateAjout, IdStatut, IdDevis)
-                VALUES (?, ?, ?, ?, (SELECT IdStatut FROM StatutCommande WHERE Statut = 'en_cours'), ?)";
+    public function addCommande($numero, $adresseDepart, $adresseArivee, $dateDepartDossier, $nbColis, $IdDevis, $dateArriveeSaisie, $image = "") {
+        $sql = "INSERT INTO Commande (NumeroBonCommande, AdresseDepart, AdresseArivee, DateAjout, IdStatut, IdDevis, ImageBonDeCommande)
+                VALUES (?, ?, ?, ?, (SELECT IdStatut FROM StatutCommande WHERE Statut = 'en_cours'), ?, ?)";
         $query = $this->pdo->prepare($sql);
-        return $query->execute([$numero, $adresseDepart, $adresseArivee, $dateArriveeSaisie, $IdDevis]);
+        return $query->execute([$numero, $adresseDepart, $adresseArivee, $dateArriveeSaisie, $IdDevis, $image]);
     }
 
     public function updateCommande($numero, $adresseDepart, $adresseArivee, $IdDevis, $dateArriveeSaisie) {

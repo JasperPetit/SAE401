@@ -51,13 +51,13 @@
                                 <?= htmlspecialchars($d['PrenomUtilisateur'] ?? '') ?> <?= htmlspecialchars($d['NomUtilisateur'] ?? '') ?>
                             </td>
                             <td>
-                                <strong><?= htmlspecialchars($d['name'] ?? 'Non spécifié') ?></strong><br>
+                                <strong><?= htmlspecialchars($d['numeroDevis'] ?? 'Non spécifié') ?></strong><br>
                                 <span style="font-size: 0.85rem; color: var(--text-muted);">Fournisseur: <?= htmlspecialchars($d['NomFournisseur'] ?? '') ?></span>
                             </td>
-                            <td style="font-weight: bold; font-size: 1.05rem;"><?= htmlspecialchars($d['prix'] ?? '0') ?> €</td>
+                            <td style="font-weight: bold; font-size: 1.05rem;"><?= htmlspecialchars($d['Prix'] ?? '0') ?> €</td>
                             <td>
-                                <?php if (!empty($d['imageDevis'])): ?>
-                                    <a href="uploads/<?= htmlspecialchars($d['imageDevis']) ?>" target="_blank" style="color: var(--primary-blue); font-weight: bold; text-decoration: none;">
+                                <?php if (!empty($d['ImageDevis'])): ?>
+                                    <a href="uploads/<?= htmlspecialchars($d['ImageDevis']) ?>" target="_blank" style="color: var(--primary-blue); font-weight: bold; text-decoration: none;">
                                         <i class="fas fa-file-pdf"></i> PDF
                                     </a>
                                 <?php else: ?>
@@ -65,19 +65,19 @@
                                 <?php endif; ?>
                             </td>
                             <td>
-                                <?php if (!isset($d['SignatureOuiOuNon']) || $d['SignatureOuiOuNon'] == 0): ?>
+                                <?php if (!isset($d['IdStatut']) || $d['IdStatut'] == 1): ?>
                                     <div style="display: flex; gap: 8px;">
-                                        <a href="index.php?action=validerDevis&id=<?= htmlspecialchars($d['idDevis']) ?>" class="btn" style="background-color: var(--success); padding: 8px 12px; font-size:0.85rem;">
+                                        <a href="index.php?action=validerDevis&id=<?= htmlspecialchars($d['IdDevis']) ?>" class="btn" style="background-color: var(--success); padding: 8px 12px; font-size:0.85rem;">
                                             <i class="fas fa-check"></i> Accorder
                                         </a>
-                                        <a href="index.php?action=refuserDevis&id=<?= htmlspecialchars($d['idDevis']) ?>" class="btn" style="background-color: var(--danger); padding: 8px 12px; font-size:0.85rem;">
+                                        <a href="index.php?action=refuserDevis&id=<?= htmlspecialchars($d['IdDevis']) ?>" class="btn" style="background-color: var(--danger); padding: 8px 12px; font-size:0.85rem;">
                                             <i class="fas fa-ban"></i> Refuser
                                         </a>
                                     </div>
                                 <?php else: ?>
                                     <?php 
-                                        $class = ($d['SignatureOuiOuNon'] == 1) ? 'badge-success' : 'badge-danger';
-                                        $text = ($d['SignatureOuiOuNon'] == 1) ? 'VALIDÉ' : 'REFUSÉ';
+                                        $class = ($d['IdStatut'] == 2) ? 'badge-success' : 'badge-danger';
+                                        $text = ($d['IdStatut'] == 2) ? 'VALIDÉ' : 'REFUSÉ';
                                     ?>
                                     <span class="badge <?= $class ?>"><?= $text ?></span>
                                 <?php endif; ?>
