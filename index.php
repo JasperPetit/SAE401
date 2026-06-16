@@ -150,9 +150,14 @@ switch ($action) {
         $controller->validerLivraison();
         break;
 
+    case 'imprimer':
+        $controller = new \App\Controllers\ColisController($db);
+        $controller->imprimer();
+        break;
+
     case 'nouveau':
-        // Gère la réimpression ou l'édition d'étiquettes
-        require_once VIEWS . '/pageNouvelEnvoi.php';
+        $controller = new \App\Controllers\CommandeController($db);
+        $controller->afficherEditionEtiquettes();
         break;
 
     // === GESTION DES FOURNISSEURS ===

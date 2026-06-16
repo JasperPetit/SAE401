@@ -28,7 +28,7 @@ class ColisModel {
     $newId   = $maxId ? ((int)$maxId + 1) : 1;
 
 
-    $sql  = "INSERT INTO Colis (IdColis, date_arrivee_prevu) VALUES (?, ?)";
+    $sql  = "INSERT INTO Colis (IdColis, date_arrivee_prevu, IdStatut) VALUES (?, ?, (SELECT IdStatut FROM StatutColis WHERE Statut = 'en_cours'))";
     $stmt = $this->pdo->prepare($sql);
     $stmt->execute([$newId, $dateArrivee]);
 
@@ -86,13 +86,17 @@ class ColisModel {
 
     public function getListeColisComplete() {
         $sql = "SELECT co.IdColis, co.nom_colis, co.date_arrivee_prevu, sc.Statut,
-                F.NomFournisseur, C.NumeroBonCommande, C.DateAjout AS DateCommande
+                F.NomFournisseur, C.NumeroBonCommande, C.DateAjout AS DateCommande,
+                C.AdresseArivee, U.Nom, U.Prenom, dep.NomDepartement, D.Date_
                 FROM Colis co
                 JOIN StatutColis sc ON co.IdStatut = sc.IdStatut
                 JOIN Compose_une CU ON co.IdColis = CU.IdColis
                 JOIN Commande C ON CU.IdBonCommande = C.IdBonCommande
                 JOIN Devis D ON C.IdDevis = D.IdDevis
                 JOIN Fournisseur F ON D.IdFournisseur = F.IdFournisseur
+                JOIN Utilisateur U ON D.IdUtilisateur = U.IdUtilisateur
+                LEFT JOIN Appartient_a A ON U.IdUtilisateur = A.IdUtilisateur
+                LEFT JOIN Departement dep ON A.IdDepartement = dep.IdDepartement
                 ORDER BY co.IdColis DESC";
         return $this->pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
     }

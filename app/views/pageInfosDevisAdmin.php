@@ -32,16 +32,16 @@
                 <tbody>
                     <?php if(!empty($listeDevis)): foreach ($listeDevis as $devi): ?>
                     <tr class="devis-row">
-                        <td><strong><?= htmlspecialchars($devi['idDevis'] ?? 'N/A') ?></strong></td>
+                        <td><strong><?= htmlspecialchars($devi['IdDevis'] ?? 'N/A') ?></strong></td>
                         <td>
-                            <strong><?= htmlspecialchars($devi['name'] ?? 'Non spécifié') ?></strong><br>
-                            <span style="font-size: 0.85rem; color: var(--text-muted);">Fournisseur: <?= htmlspecialchars($devi['nomEntreprise'] ?? '') ?></span>
+                            <strong><?= htmlspecialchars($devi['numeroDevis'] ?? 'Non spécifié') ?></strong><br>
+                            <span style="font-size: 0.85rem; color: var(--text-muted);">Fournisseur: <?= htmlspecialchars($devi['NomFournisseur'] ?? '') ?></span>
                         </td>
                         <td><?= htmlspecialchars($devi['NomDepartement'] ?? 'N/A') ?></td>
-                        <td style="font-weight: bold; font-size: 1.05rem;"><?= htmlspecialchars($devi['prix'] ?? '0') ?> €</td>
+                        <td style="font-weight: bold; font-size: 1.05rem;"><?= htmlspecialchars($devi['Prix'] ?? '0') ?> €</td>
                         <td>
-                            <?php if (!empty($devi['imageDevis'])): ?>
-                                <a href="uploads/<?= htmlspecialchars($devi['imageDevis']) ?>" target="_blank" style="color: var(--primary-blue); font-weight: bold; text-decoration: none;">
+                            <?php if (!empty($devi['ImageDevis'])): ?>
+                                <a href="uploads/<?= htmlspecialchars($devi['ImageDevis']) ?>" target="_blank" style="color: var(--primary-blue); font-weight: bold; text-decoration: none;">
                                     <i class="fas fa-file-pdf"></i> PDF
                                 </a>
                             <?php else: ?>
@@ -49,7 +49,17 @@
                             <?php endif; ?>
                         </td>
                         <td>
-                            <button class="btn" style="background-color: var(--primary-blue);"><i class="fas fa-pen-fancy"></i> Signer</button>
+                            <?php if (!isset($devi['IdStatut']) || $devi['IdStatut'] == 1): ?>
+                                <a href="index.php?action=validerDevis&id=<?= htmlspecialchars($devi['IdDevis']) ?>" class="btn" style="background-color: var(--primary-blue); text-decoration: none;">
+                                    <i class="fas fa-pen-fancy"></i> Signer
+                                </a>
+                            <?php else: ?>
+                                <?php 
+                                    $class = ($devi['IdStatut'] == 2) ? 'badge-success' : 'badge-danger';
+                                    $text = ($devi['IdStatut'] == 2) ? 'SIGNÉ' : 'REFUSÉ';
+                                ?>
+                                <span class="badge <?= $class ?>"><?= $text ?></span>
+                            <?php endif; ?>
                         </td>
                     </tr>
                     <?php endforeach; else: ?>

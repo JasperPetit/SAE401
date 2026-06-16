@@ -38,7 +38,17 @@
                     <select name="idDevis" class="form-control" required>
                         <option value="">Choisir un devis</option>
                         <?php if(!empty($listeDevis)): foreach ($listeDevis as $devis): ?>
-                            <option value="<?= $devis['idDevis'] ?>">Devis n°<?= htmlspecialchars($devis['idDevis']) ?></option>
+                            <option value="<?= $devis['IdDevis'] ?>">Devis n°<?= htmlspecialchars($devis['IdDevis']) ?></option>
+                        <?php endforeach; endif; ?>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Sélectionner le fournisseur :</label>
+                    <select name="idFournisseur" class="form-control" required>
+                        <option value="">Choisir un fournisseur</option>
+                        <?php if(!empty($resNomEntreprise)): foreach ($resNomEntreprise as $fournisseur): ?>
+                            <option value="<?= $fournisseur['IdFournisseur'] ?>"><?= htmlspecialchars($fournisseur['NomFournisseur']) ?></option>
                         <?php endforeach; endif; ?>
                     </select>
                 </div>

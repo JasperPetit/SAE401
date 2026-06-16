@@ -23,21 +23,21 @@
                 <?php foreach ($resFournisseurs as $fournisseur): ?>
                     <div class="stat-card section-fournisseur" style="border-top: 4px solid var(--primary-blue);">
                         <h3 style="color: var(--primary-blue); font-size: 1.2rem; margin-bottom: 15px; text-transform: none;">
-                            <?= htmlspecialchars($fournisseur['nomEntreprise'] ?? 'Inconnu') ?>
+                            <?= htmlspecialchars($fournisseur['NomFournisseur'] ?? 'Inconnu') ?>
                         </h3>
                         
                         <div style="color: var(--text-dark); font-size: 0.95rem; margin-bottom: 20px; line-height: 1.6;">
                             <p><i class="fas fa-envelope" style="color: var(--text-muted); width: 20px;"></i> <?= htmlspecialchars($fournisseur['Mail'] ?? 'Non renseigné') ?></p>
-                            <p><i class="fas fa-phone" style="color: var(--text-muted); width: 20px;"></i> <?= htmlspecialchars($fournisseur['NumeroTelephone'] ?? 'Non renseigné') ?></p>
-                            <p><i class="fas fa-map-marker-alt" style="color: var(--text-muted); width: 20px;"></i> <?= htmlspecialchars($fournisseur['adresse'] ?? 'Non renseignée') ?></p>
+                            <p><i class="fas fa-phone" style="color: var(--text-muted); width: 20px;"></i> <?= htmlspecialchars($fournisseur['numeroTelephone'] ?? 'Non renseigné') ?></p>
+                            <p><i class="fas fa-map-marker-alt" style="color: var(--text-muted); width: 20px;"></i> <?= htmlspecialchars($fournisseur['Adresse'] ?? 'Non renseignée') ?></p>
                         </div>
 
                         <div style="display: flex; gap: 10px; border-top: 1px solid var(--border-color); padding-top: 15px;">
-                            <a href="index.php?action=ModifierFournisseur&modifier=<?= $fournisseur['idFournisseur'] ?>" class="btn btn-blue" style="flex: 1; justify-content: center; font-size: 0.85rem; padding: 8px;">
+                            <a href="index.php?action=ModifierFournisseur&modifier=<?= $fournisseur['IdFournisseur'] ?>" class="btn btn-blue" style="flex: 1; justify-content: center; font-size: 0.85rem; padding: 8px;">
                                 <i class="fas fa-edit"></i> Modifier
                             </a>
-                            <form action="index.php?action=SupprimerFournisseur" method="POST" style="flex: 1;" onsubmit="return confirmerSuppressionFournisseur('<?= addslashes($fournisseur['nomEntreprise']) ?>')">
-                                <input type="hidden" name="id_fournisseur" value="<?= $fournisseur['idFournisseur'] ?>">
+                            <form action="index.php?action=SupprimerFournisseur" method="POST" style="flex: 1;" onsubmit="return confirmerSuppressionFournisseur('<?= addslashes($fournisseur['NomFournisseur']) ?>')">
+                                <input type="hidden" name="id_fournisseur" value="<?= $fournisseur['IdFournisseur'] ?>">
                                 <button type="submit" name="supprimer_fournisseur" class="btn" style="width: 100%; justify-content: center; font-size: 0.85rem; padding: 8px; background-color: var(--danger);">
                                     <i class="fas fa-trash"></i>
                                 </button>
