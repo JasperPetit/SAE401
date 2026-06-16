@@ -5,7 +5,7 @@ if (session_status() === PHP_SESSION_NONE) {
 
 $role = $_SESSION['role'] ?? 'Visiteur';
 $action_actuelle = $_GET['action'] ?? 'accueil';
-$nom_complet = $_SESSION['nom_complet'] ?? 'Utilisateur Inconnu';
+$nom_complet = $_SESSION['nom_complet'] ?? 'Demandeur Inconnu';
 
 $menus = [];
 
@@ -30,7 +30,7 @@ if ($role === 'Administrateur') {
         "Arbitrage Devis" => ["action" => "pageServiceFinancierDevis", "icon" => "fa-balance-scale"],
         "Fournisseurs"    => ["action" => "afficherFournisseur", "icon" => "fa-handshake"]
     ];
-} elseif ($role === 'Utilisateur') {
+} elseif ($role === 'Demandeur') {
     $menus = [
         "Mes Projets/Devis" => ["action" => "accueil", "icon" => "fa-file-signature"],
         "Mes Commandes"     => ["action" => "afficherCommande", "icon" => "fa-file-invoice-dollar"]

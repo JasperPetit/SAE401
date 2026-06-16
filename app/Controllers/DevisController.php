@@ -41,7 +41,7 @@ class DevisController{
             if (isset($_SESSION['role']) && $_SESSION['role']=='Administrateur'){
                 header('Location: pageInfosDevis?success=1');
             }
-            elseif (isset($_SESSION['role']) && $_SESSION['role']=='Utilisateur'){
+            elseif (isset($_SESSION['role']) && $_SESSION['role']=='Demandeur'){
                 header('Location: PageInfosDevisDemandeur');
             } else {
                 header('Location: pageInfosDevis?success=1');

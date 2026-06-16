@@ -67,7 +67,7 @@ switch ($action) {
     // === ACCUEIL / TABLEAU DE BORD ===
     case 'accueil':
         // Redirection intelligente selon le profil pour charger les bonnes fonctions d'accueil
-        if (isset($_SESSION['role']) && $_SESSION['role'] === 'Utilisateur') {
+        if (isset($_SESSION['role']) && $_SESSION['role'] === 'Demandeur') {
             $controller = new \App\Controllers\DevisController($db);
             $controller->afficherDevisDepartement();
         } elseif (isset($_SESSION['role']) && $_SESSION['role'] === 'Service_Postal') {
