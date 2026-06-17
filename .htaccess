@@ -1,0 +1,13 @@
+Options +FollowSymLinks -MultiViews
+RewriteEngine On
+
+# IMPORTANT : Mets ici le nom exact de ton dossier dans /var/www/html/
+# Si ton site est sur http://localhost/projet_colis/, laisse comme ça :
+RewriteBase /Projet-Colis/
+
+# Si le fichier demandé n'existe pas physiquement (ex: /AjouterCommande)
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+
+# Alors on redirige tout vers index.php en passant l'action
+RewriteRule ^(.+)$ index.php?action=$1 [QSA,L]
