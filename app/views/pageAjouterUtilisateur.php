@@ -33,6 +33,17 @@
 
                 <div class="form-grid" style="margin-top:14px;">
                     <div>
+                        <label class="f-label">Adresse Email <span class="req">*</span></label>
+                        <input type="email" class="f-input" name="email" placeholder="Ex: jean.dupont@iut.fr" required>
+                    </div>
+                    <div>
+                        <label class="f-label">Mot de passe provisoire <span class="req">*</span></label>
+                        <input type="password" name="mdpCAS" class="f-input" placeholder="Mot de passe sécurisé" required>
+                    </div>
+                </div>
+
+                <div class="form-grid" style="margin-top:14px;">
+                    <div>
                         <label class="f-label">Rôle principal <span class="req">*</span></label>
                         <select id="role" name="Role" class="f-input" onchange="afficherDepartement()" required>
                             <option value="">-- Sélectionnez un rôle --</option>
@@ -43,8 +54,7 @@
                         </select>
                     </div>
                     <div>
-                        <label class="f-label">Mot de passe provisoire <span class="req">*</span></label>
-                        <input type="password" name="mdpCAS" class="f-input" placeholder="Mot de passe sécurisé" required>
+                        <!-- Espace vide pour garder la grille alignée si besoin, ou on peut le laisser vide -->
                     </div>
                 </div>
 
