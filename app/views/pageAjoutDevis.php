@@ -17,7 +17,7 @@
 <body>
     <?php require_once VIEWS . '/navbar.php'; ?>
 
-    <main class="main-content">
+    <main class="main">
         <div class="content-header">
             <h1><i class="fas fa-file-invoice"></i> Ajouter un nouveau Devis</h1>
         </div>

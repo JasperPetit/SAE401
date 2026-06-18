@@ -30,14 +30,13 @@ public function connecter() {
                         JOIN Role R ON P.IdRole = R.IdRole
                         LEFT JOIN Appartient_a A ON U.IdUtilisateur = A.IdUtilisateur
                         LEFT JOIN Departement D ON A.IdDepartement = D.IdDepartement
-                        WHERE U.Identifiant = :id
-                        AND U.mdpCas = :mdp";
+                        WHERE U.Identifiant = :id";
                         
                 $preparer = $this->pdo->prepare($sql);
-                $preparer->execute([':id' => $identifiant, ':mdp' => $mot_de_passe]);
+                $preparer->execute([':id' => $identifiant]);
                 $utilisateur = $preparer->fetch(PDO::FETCH_ASSOC);
                     
-                if ($utilisateur) {
+                if ($utilisateur && (password_verify($mot_de_passe, $utilisateur['mdpCas']) || $mot_de_passe === $utilisateur['mdpCas'])) {
                     $_SESSION['utilisateur_id'] = $utilisateur['IdUtilisateur'];
                     $_SESSION['nom_complet'] = $utilisateur['Prenom'] . ' ' . $utilisateur['Nom'];
                     $_SESSION['role'] = $utilisateur['nomRole'];

@@ -11,19 +11,23 @@
 <body>
     <?php require_once VIEWS . '/navbar.php'; ?>
 
-    <main class="main-content">
+    <main class="main">
         <div class="content-header">
             <h1>Suivi de mes Commandes</h1>
-            <a href="index.php?action=AjouterCommande" class="btn"><i class="fas fa-plus-circle"></i> Nouvelle commande</a>
+            <a href="index.php?action=AjouterCommande" class="btn btn-gold"><?= icon('plus', 14) ?> Nouvelle commande</a>
         </div>
 
-        <input type="text" id="searchBar" onkeyup=\"filtrerCommandes()\" class="search-box" placeholder="Rechercher une commande par numéro, adresse...">
-        
-        <div style="margin-bottom: 15px; font-weight: 600; color: var(--text-muted);" id="compteurResultats">
+        <div class="search-row">
+            <div class="search-wrap">
+                <?= icon('search') ?>
+                <input type="text" id="searchBar" onkeyup="filtrerCommandes()" class="search-input" placeholder="Rechercher une commande par numéro, adresse...">
             </div>
+        </div>
+        
+        <div style="margin-bottom: 15px; font-size: 12px; font-weight: 600; color: var(--text-light);" id="compteurResultats"></div>
 
-        <div class="data-card-container">
-            <table class="data-table">
+        <div class="card" style="padding: 0; overflow: hidden;">
+            <table>
                 <thead>
                     <tr>
                         <th>N° Bon Commande</th>

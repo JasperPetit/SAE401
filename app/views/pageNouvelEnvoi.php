@@ -9,7 +9,7 @@
 <body>
     <?php require_once VIEWS . '/navbar.php'; ?>
 
-    <main class="main-content">
+    <main class="main">
         <div class="content-header" style="justify-content: flex-start; gap: 20px;">
             <h1><i class="fas fa-print"></i> Édition d'Étiquettes</h1>
             <?php @include 'app/views/rechercheColis.php'; ?>

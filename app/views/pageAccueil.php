@@ -11,7 +11,7 @@
 <body>
     <?php require_once VIEWS . '/navbar.php'; ?>
 
-    <main class="main-content">
+    <main class="main">
         <div class="content-header">
             <h1>Tableau de Bord - Opérations Logistiques</h1>
         </div>

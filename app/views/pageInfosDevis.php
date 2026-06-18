@@ -10,7 +10,7 @@
 <body>
     <?php require_once VIEWS . '/navbar.php'; ?>
 
-    <main class="main-content">
+    <main class="main">
         <div class="content-header">
             <h1>Mes Demandes de Devis & Projets</h1>
             <a href="index.php?action=formulaireDevis" class="btn"><i class="fas fa-plus-circle"></i> Déposer un nouveau devis</a>

@@ -3,79 +3,69 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ajouter un Utilisateur - Admin</title>
+    <title>Ajouter un Utilisateur — Suivi Colis IUT</title>
     <link rel="stylesheet" href="public/css/style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        .form-group { margin-bottom: 20px; }
-        .form-group label { display: block; font-weight: 600; margin-bottom: 8px; color: var(--text-dark); }
-        .form-control { width: 100%; max-width: 600px; padding: 10px 15px; border: 1px solid var(--border-color); border-radius: 6px; }
-    </style>
 </head>
-<body>
+<body class="service-admin">
+
     <?php require_once VIEWS . '/navbar.php'; ?>
 
-    <main class="main-content">
-        <div class="content-header">
-            <h1><i class="fas fa-user-plus"></i> Nouvel Utilisateur</h1>
+    <main class="main">
+        <div class="page-header">
+            <h1>Créer un nouvel accès</h1>
+            <p>Enregistrez un nouveau membre du personnel et affectez-lui un rôle spécifique</p>
         </div>
 
-        <?php if (isset($erreur) && $erreur): ?>
-            <div style="background-color: #fee2e2; color: #991b1b; padding: 15px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #f87171;">
-                <i class="fas fa-exclamation-triangle"></i> <?= htmlspecialchars($erreur) ?>
-            </div>
-        <?php endif; ?>
-
-        <div class="data-card-container" style="padding: 30px;">
-            <form method="POST" action="index.php?action=ajouterUtilisateur">
-                <div class="form-group">
-                    <label for="prenom">Prénom :</label>
-                    <input type="text" id="prenom" name="prenom" class="form-control" placeholder="Ex: Jean" required>
+        <form method="POST" action="index.php?action=ajouterUtilisateur">
+            <div class="card">
+                <div class="card-title" style="margin-bottom:14px;">Informations d'identité</div>
+                
+                <div class="form-grid">
+                    <div>
+                        <label class="f-label">Prénom <span class="req">*</span></label>
+                        <input class="f-input" name="prenom" placeholder="Ex: Jean" required>
+                    </div>
+                    <div>
+                        <label class="f-label">Nom <span class="req">*</span></label>
+                        <input class="f-input" name="nom" placeholder="Ex: Dupont" required>
+                    </div>
                 </div>
 
-                <div class="form-group">
-                    <label for="nom">Nom :</label>
-                    <input type="text" id="nom" name="nom" class="form-control" placeholder="Ex: Dupont" required>
+                <div class="form-grid" style="margin-top:14px;">
+                    <div>
+                        <label class="f-label">Rôle principal <span class="req">*</span></label>
+                        <select id="role" name="Role" class="f-input" onchange="afficherDepartement()" required>
+                            <option value="">-- Sélectionnez un rôle --</option>
+                            <option value="1">Administrateur</option>
+                            <option value="4">Demandeur (Professeur / Département)</option>
+                            <option value="3">Service Postal (Logistique)</option>
+                            <option value="2">Service Financier</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="f-label">Mot de passe provisoire <span class="req">*</span></label>
+                        <input type="password" name="mdpCAS" class="f-input" placeholder="Mot de passe sécurisé" required>
+                    </div>
                 </div>
 
-                <div class="form-group">
-                    <label for="role">Rôle principal :</label>
-                    <select id="role" name="Role[]" class="form-control" onchange="afficherDepartement()" required>
-                        <option value="">-- Sélectionnez un rôle --</option>
-                        <option value="1">Administrateur</option>
-                        <option value="4">Demandeur (Professeur / Département)</option>
-                        <option value="3">Service Postal (Logistique)</option>
-                        <option value="2">Service Financier</option>
-                    </select>
-                </div>
-
-                <div class="form-group" id="div-departement" style="display: none;">
-                    <label for="departement">Département (Requis pour un Demandeur) :</label>
-                    <select id="departement" name="departement[]" class="form-control">
+                <div id="div-departement" style="display: none; margin-top:14px;">
+                    <label class="f-label">Département (Requis pour un Demandeur) <span class="req">*</span></label>
+                    <select id="departement" name="departement" class="f-input">
                         <option value="">-- Sélectionnez un département --</option>
                         <?php if(!empty($ListeDepartement)): foreach($ListeDepartement as $dep): ?>
-                            <option value="<?= htmlspecialchars($dep['IdDepartement'] ?? $dep['nomDepartement'] ?? '') ?>">
-                                <?= htmlspecialchars($dep['nomDepartement'] ?? $dep['IdDepartement'] ?? '') ?>
+                            <option value="<?= htmlspecialchars($dep['IdDepartement']) ?>">
+                                <?= htmlspecialchars($dep['NomDepartement']) ?>
                             </option>
-                        <?php endforeach; else: ?>
-                            <option value="Informatique">Informatique</option>
-                            <option value="GEII">GEII</option>
-                            <option value="Génie Mécanique">Génie Mécanique</option>
-                        <?php endif; ?>
+                        <?php endforeach; endif; ?>
                     </select>
                 </div>
+            </div>
 
-                <div class="form-group">
-                    <label for="mdpCAS">Mot de passe provisoire :</label>
-                    <input type="password" id="mdpCAS" name="mdpCAS" class="form-control" placeholder="Mot de passe sécurisé" required>
-                </div>
-
-                <div style="margin-top: 30px;">
-                    <button type="submit" class="btn"><i class="fas fa-save"></i> Créer le compte</button>
-                    <a href="index.php?action=pageVoirUtilisateurs" class="btn btn-blue" style="margin-left: 10px; background-color: var(--text-muted);">Annuler</a>
-                </div>
-            </form>
-        </div>
+            <div class="actions-row">
+                <button class="btn btn-gold" type="submit"><?= icon('send', 14) ?> Créer le compte utilisateur</button>
+                <a class="btn btn-outline" href="index.php?action=pageVoirUtilisateurs">Annuler</a>
+            </div>
+        </form>
     </main>
 
     <script>

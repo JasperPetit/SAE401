@@ -35,7 +35,7 @@
                     <input type="password" id="mot_de_passe" name="mot_de_passe" placeholder="Entrez votre mot de passe" required>
                 </div>
 
-                <button type="submit" class="btn" style="width: 100%; justify-content: center; padding: 12px;">
+                <button type="submit" class="btn btn-login">
                     <i class="fas fa-sign-in-alt"></i> Se connecter
                 </button>
             </form>
