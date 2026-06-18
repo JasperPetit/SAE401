@@ -49,6 +49,11 @@
                             <span class="badge <?= $badgeClass ?>"><?= htmlspecialchars($statut) ?></span>
                             
                             <div style="display: flex; gap: 8px;">
+                                <?php if (stripos($statut, 'validé') !== false || stripos($statut, 'accepté') !== false): ?>
+                                    <a href="index.php?action=AjouterCommande&idDevis=<?= htmlspecialchars($devi['IdDevis']) ?>" class="btn" style="padding: 6px 12px; font-size: 0.8rem; background-color: #10b981; border-color: #10b981; color: white;">
+                                        <i class="fas fa-shopping-cart"></i> Créer Commande
+                                    </a>
+                                <?php endif; ?>
                                 <?php if (!empty($devi['ImageDevis'])): ?>
                                     <a href="uploads/<?= htmlspecialchars($devi['ImageDevis']) ?>" target="_blank" class="btn btn-blue" style="padding: 6px 12px; font-size: 0.8rem;">
                                         <i class="fas fa-file-pdf"></i> PDF

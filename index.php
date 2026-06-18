@@ -133,6 +133,11 @@ switch ($action) {
         $controller->modifierCommande();
         break;
 
+    case 'validerLivraisonCommande':
+        $controller = new \App\Controllers\CommandeController($db);
+        $controller->validerLivraisonCommande();
+        break;
+
     // === GESTION DES COLIS ===
     case 'afficherColis':
     case 'suivi':

@@ -162,5 +162,13 @@ class CommandeController{
 
         require_once VIEWS . '/pageNouvelEnvoi.php';
     }
+    public function validerLivraisonCommande() {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['NumeroBonCommande'])) {
+            $numeroBonCommande = $_POST['NumeroBonCommande'];
+            $this->CommandeModel->marquerCommandeCommeLivree($numeroBonCommande);
+        }
+        header("Location: index.php?action=afficherCommande");
+        exit();
+    }
 }
 ?>

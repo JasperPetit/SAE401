@@ -110,5 +110,15 @@ class CommandeModel {
         return $query->execute([$IdDevis, $adresseDepart, $adresseArivee, $dateArriveeSaisie, $numero]);
     }
 
+    public function marquerCommandeCommeLivree($numeroBonCommande) {
+        $sql = "UPDATE Commande SET IdStatut = (SELECT IdStatut FROM StatutCommande WHERE Statut = 'livré' OR Statut = 'livre') WHERE NumeroBonCommande = ?";
+        $this->pdo->prepare($sql)->execute([$numeroBonCommande]);
+        
+        $sqlColis = "UPDATE Colis SET IdStatut = (SELECT IdStatut FROM StatutColis WHERE Statut = 'livré' OR Statut = 'livre') 
+                     WHERE IdColis IN (SELECT IdColis FROM Compose_une WHERE IdBonCommande = 
+                         (SELECT IdBonCommande FROM Commande WHERE NumeroBonCommande = ?))";
+        $this->pdo->prepare($sqlColis)->execute([$numeroBonCommande]);
+    }
+
 }
 ?>

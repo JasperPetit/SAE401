@@ -37,7 +37,13 @@
                         <select name="idDevis" class="f-input" required>
                             <option value="">Choisir un devis</option>
                             <?php if(!empty($listeDevis)): foreach ($listeDevis as $devis): ?>
-                                <option value="<?= $devis['IdDevis'] ?>">Devis n°<?= htmlspecialchars($devis['IdDevis']) ?> (<?= htmlspecialchars($devis['Prix'] ?? '') ?>€)</option>
+                                <?php 
+                                    $statutDevis = $devis['StatutDevis'] ?? ''; 
+                                    if ($devis['IdStatut'] == 2 || stripos($statutDevis, 'validé') !== false || stripos($statutDevis, 'accepté') !== false): 
+                                        $selected = (isset($_GET['idDevis']) && $_GET['idDevis'] == $devis['IdDevis']) ? 'selected' : '';
+                                ?>
+                                    <option value="<?= $devis['IdDevis'] ?>" <?= $selected ?>>Devis n°<?= htmlspecialchars($devis['IdDevis']) ?> (<?= htmlspecialchars($devis['Prix'] ?? '') ?>€)</option>
+                                <?php endif; ?>
                             <?php endforeach; endif; ?>
                         </select>
                     </div>

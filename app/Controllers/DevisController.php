@@ -42,7 +42,7 @@ class DevisController{
                 header('Location: index.php?action=pageInfosDevis&success=1');
             }
             elseif (isset($_SESSION['role']) && $_SESSION['role']=='Demandeur'){
-                header('Location: PageInfosDevisDemandeur');
+                header('Location: index.php?action=pageInfosDevis&success=1');
             } else {
                 header('Location: index.php?action=pageInfosDevis&success=1');
             }
