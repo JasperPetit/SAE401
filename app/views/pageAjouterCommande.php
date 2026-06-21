@@ -12,8 +12,6 @@
 
     <main class="main">
         <div class="page-header">
-            <h1>Supervision & Nouvel Envoi</h1>
-            <p>Régularisez une commande ou enregistrez un nouveau flux entrant</p>
         </div>
 
         <div class="card">
@@ -37,16 +35,7 @@
                         <select name="idDevis" class="f-input" required>
                             <option value="">Choisir un devis</option>
                             <?php if(!empty($listeDevis)): foreach ($listeDevis as $devis): ?>
-                                <option value="<?= $devis['IdDevis'] ?>">Devis n°<?= htmlspecialchars($devis['IdDevis']) ?> (<?= htmlspecialchars($devis['Prix'] ?? '') ?>€)</option>
-                            <?php endforeach; endif; ?>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="f-label">Fournisseur <span class="req">*</span></label>
-                        <select name="idFournisseur" class="f-input" required>
-                            <option value="">Choisir un fournisseur</option>
-                            <?php if(!empty($resNomEntreprise)): foreach ($resNomEntreprise as $fournisseur): ?>
-                                <option value="<?= $fournisseur['IdFournisseur'] ?>"><?= htmlspecialchars($fournisseur['NomFournisseur']) ?></option>
+                                <option value="<?= $devis['IdDevis'] ?>">Devis n°<?= htmlspecialchars($devis['numeroDevis']) ?> (<?= htmlspecialchars($devis['Prix'] ?? '') ?>€)</option>
                             <?php endforeach; endif; ?>
                         </select>
                     </div>
@@ -73,10 +62,14 @@
                         <input type="file" name="ImageCommande" class="f-input" accept=".pdf, .jpg, .jpeg" required>
                     </div>
                 </div>
+                <div class="form-group">
+                    <label for="details" class="f-label">Détails sur le projet :</label>
+                    <textarea id="details" name="details" rows="4" class="form-control" placeholder="details ..."></textarea>
+                </div>
 
                 <div class="actions-row" style="margin-top:20px;">
                     <button type="submit" class="btn btn-gold"><?= icon('send', 14) ?> Enregistrer la commande</button>
-                    <a href="index.php?action=afficherCommande" class="btn btn-outline">Annuler</a>
+                    <a href="index.php?action=ajouterCommande" class="btn btn-outline">Annuler</a>
                 </div>
             </form>
         </div>
