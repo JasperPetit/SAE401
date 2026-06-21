@@ -81,5 +81,27 @@ class UtilisateurController{
         $resListeUtilisateurs = $this->UtilisateurModel->getAllUtilisateurs();
         require_once VIEWS . '/pageVoirUtilisateurs.php';
     }
+
+    public function ajouterDeDepartement(){
+        
+        if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['nomDepartement'])){
+            $sql = $this->pdo->prepare("INSERT INTO Departement (NomDepartement) VALUES (?)");
+            $sql->execute([trim($_POST['nomDepartement'])]);
+            header("Location: index.php?action=pageAdmin&success=dep");
+            exit();
+        }
+    }
+
+    public function ajouterRole(){
+        if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['nomRole'])){
+            $sql = $this->pdo->prepare("INSERT INTO Role (Role) VALUES (?)");
+            $sql->execute([trim($_POST['nomRole'])]);
+            header("Location: index.php?action=pageAdmin&success=role");
+            exit();
+
+        }
+    }
 }
+
+    
 ?>
