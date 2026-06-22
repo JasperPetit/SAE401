@@ -20,11 +20,12 @@
             <div class="admin-block">
                 <div class="ab-header">
                     <div class="ab-icon"><?= icon('db', 16) ?></div>
-                    <div class="ab-title">Base de données</div>
+                    <div class="ab-title">Role et departement</div>
                 </div>
-                <div class="ab-desc">Sauvegarde et maintenance de la base de données du système de suivi.</div>
+                <div class="ab-desc">Ajout de role et de nouveaux departements a affécté au tuilisateurs.</div>
                 <div class="ab-actions">
-                    <a class="btn btn-gold btn-sm" href="index.php?action=pageAdmin&backup=1">Sauvegarder maintenant</a>
+                    <a class="btn btn-primary btn-sm" href="index.php?action=pageVoirUtilisateurs">Voir les roles</a>
+                    <a class="btn btn-primary btn-sm" href="index.php?action=pageVoirUtilisateurs">Voir les departements</a>
                 </div>
             </div>
 

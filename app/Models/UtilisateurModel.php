@@ -85,7 +85,12 @@ class utilisateurModel {
         }
     }
 
-
+    public function getAllRole(){
+        $sql = "SELECT *
+        FROM Role";
+                
+        return $this->pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
+    }
 
 }
 ?>

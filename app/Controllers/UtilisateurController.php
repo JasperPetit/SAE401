@@ -68,6 +68,7 @@ class UtilisateurController{
             }
         }
         $ListeDepartement = $this->DepartementModel->getAllDepartements();
+        $ListeRole = $this->UtilisateurModel->getAllRole();
         require_once VIEWS . '/pageAjouterUtilisateur.php';
     }
 

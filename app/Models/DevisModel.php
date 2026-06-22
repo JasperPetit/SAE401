@@ -18,6 +18,20 @@ class devisModel {
         return $this->getDevisId();
     }
 
+    public function getAllDevisBydepartment($dep){
+        $sql = "SELECT d.*, sd.Statut AS StatutDevis, u.Nom AS NomUtilisateur, u.Prenom AS PrenomUtilisateur, dep.NomDepartement, f.NomFournisseur
+        FROM Devis d
+        INNER JOIN Utilisateur u ON d.IdUtilisateur = u.IdUtilisateur
+        INNER JOIN Fournisseur f ON d.IdFournisseur = f.IdFournisseur
+        INNER JOIN StatutDevis sd ON d.IdStatut = sd.IdStatut
+        LEFT JOIN Appartient_a a ON u.IdUtilisateur = a.IdUtilisateur
+        LEFT JOIN Departement dep ON a.IdDepartement = dep.IdDepartement
+        WHERE 
+        ORDER BY d.Date_ DESC";
+
+        
+        return $this->pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
+    }
     public function getAllDevisDecroissant() {
         $sql = "SELECT d.*, sd.Statut AS StatutDevis, u.Nom AS NomUtilisateur, u.Prenom AS PrenomUtilisateur, dep.NomDepartement, f.NomFournisseur
                 FROM Devis d

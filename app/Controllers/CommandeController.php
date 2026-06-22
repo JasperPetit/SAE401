@@ -71,9 +71,7 @@ class CommandeController{
                 $erreur = "Veuillez remplir tous les champs, y compris le fournisseur.";
             }
         }
-        $listeDevis = $this->DevisModel->getAllDevisDecroissant();   
-        $resNomEntreprise = $this->FournisseurModel->getAllFournisseurs();
-
+        $listeDevis = $this->DevisModel->getDevisDepartement($_SESSION['departement']);   
         require_once VIEWS . '/pageAjouterCommande.php';
     }
 

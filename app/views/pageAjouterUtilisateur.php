@@ -35,11 +35,12 @@
                     <div>
                         <label class="f-label">Rôle principal <span class="req">*</span></label>
                         <select id="role" name="Role" class="f-input" onchange="afficherDepartement()" required>
-                            <option value="">-- Sélectionnez un rôle --</option>
-                            <option value="1">Administrateur</option>
-                            <option value="4">Demandeur (Professeur / Département)</option>
-                            <option value="3">Service Postal (Logistique)</option>
-                            <option value="2">Service Financier</option>
+                        <option value="">-- Sélectionnez un role --</option>
+                        <?php if(!empty($ListeRole)): foreach($ListeRole as $role): ?>
+                            <option value="<?= htmlspecialchars($role['IdRole']) ?>">
+                                <?= htmlspecialchars($role['Role']) ?>
+                            </option>
+                        <?php endforeach; endif; ?>
                         </select>
                     </div>
                     <div>
