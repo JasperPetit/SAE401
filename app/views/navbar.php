@@ -68,6 +68,7 @@ if ($role_session === 'Administrateur') {
 } elseif ($role_session === 'Service_Financier') {
     $badge_text = 'SERVICE FINANCIER';
     $menu_items = [
+        ['index.php?action=accueil', 'home', 'Accueil', 'accueil'],
         ['index.php?action=pageServiceFinancierDevis', 'check', 'Validation devis', 'pageServiceFinancierDevis'],
         ['index.php?action=afficherFournisseur', 'users', 'Fournisseurs', 'afficherFournisseur'],
     ];
