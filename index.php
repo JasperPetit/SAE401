@@ -204,6 +204,28 @@ switch ($action) {
         $controller = new \App\Controllers\UtilisateurController($db);
         $controller->supprimerUtilisateur();
         break;
+    
+    case 'pageVoirRoles':
+        $controller = new \App\Controllers\UtilisateurController($db);
+        $controller->afficherListeRoles();
+        break;
+
+    case 'pageVoirDepartements':
+        $controller = new \App\Controllers\UtilisateurController($db);
+        $controller->afficherListeDepartements();
+        break;
+
+    case 'pageAjouterRole':
+    case 'ajouterRole':
+        $controller = new \App\Controllers\UtilisateurController($db);
+        $controller->ajouterRole();
+        break;
+
+    case 'pageAjouterDepartement':
+    case 'ajouterDepartement':
+        $controller = new \App\Controllers\UtilisateurController($db);
+        $controller->ajouterDepartement();
+        break;
 
     // === ERREUR 404 PAR DÉFAUT ===
     default:

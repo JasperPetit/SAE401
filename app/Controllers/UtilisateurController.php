@@ -82,7 +82,18 @@ class UtilisateurController{
         require_once VIEWS . '/pageVoirUtilisateurs.php';
     }
 
-    public function ajouterDeDepartement(){
+    public function afficherListeRoles() {
+        $stmt = $this->pdo->query("SELECT * FROM Role");
+        $resListeRoles = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        require_once VIEWS . '/pageVoirRoles.php';
+    }
+
+    public function afficherListeDepartements() {
+        $resListeDepartements = $this->DepartementModel->getAllDepartements();
+        require_once VIEWS . '/pageVoirDepartements.php';
+    }
+
+    public function ajouterDepartement(){
         
         if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['nomDepartement'])){
             $sql = $this->pdo->prepare("INSERT INTO Departement (NomDepartement) VALUES (?)");
@@ -90,6 +101,7 @@ class UtilisateurController{
             header("Location: index.php?action=pageAdmin&success=dep");
             exit();
         }
+        require_once VIEWS . '/pageAjouterDepartement.php';
     }
 
     public function ajouterRole(){
@@ -100,6 +112,7 @@ class UtilisateurController{
             exit();
 
         }
+        require_once VIEWS . '/pageAjouterRole.php';
     }
 }
 
