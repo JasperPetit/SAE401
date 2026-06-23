@@ -72,13 +72,15 @@
                 <div class="form-grid" style="margin-top:14px;">
                     <div>
                         <label class="f-label">Nombre de colis attendus <span class="req">*</span></label>
-                        <input type="number" name="nbColis" min="1" value="1" class="f-input" required>
+                        <input type="number" name="nbColis" id="nbColis" min="1" value="1" class="f-input" required>
                     </div>
                     <div>
                         <label class="f-label">Bon de commande (PDF/JPG) <span class="req">*</span></label>
                         <input type="file" name="ImageCommande" class="f-input" accept=".pdf, .jpg, .jpeg" required>
                     </div>
                 </div>
+
+                <div id="conteneur-colis" style="margin-top: 14px;"></div>
 
                 <div class="actions-row" style="margin-top:20px;">
                     <button type="submit" class="btn btn-gold"><?= icon('send', 14) ?> Enregistrer la commande</button>
@@ -88,5 +90,43 @@
         </div>
     </main>
 
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const inputNbColis = document.getElementById('nbColis');
+    const conteneurColis = document.getElementById('conteneur-colis');
+
+    function genererBlocsColis() {
+        conteneurColis.innerHTML = '';
+        const nb = parseInt(inputNbColis.value) || 1;
+        
+        for (let i = 1; i <= nb; i++) {
+            const bloc = document.createElement('div');
+            bloc.style.marginTop = '14px';
+            bloc.style.padding = '14px';
+            bloc.style.border = '1px solid #e0e0e0';
+            bloc.style.borderRadius = '6px';
+            bloc.style.backgroundColor = '#f9f9f9';
+            
+            bloc.innerHTML = `
+                <div class="card-title" style="margin-bottom:10px; font-size: 14px;">Colis ${i}</div>
+                <div class="form-grid">
+                    <div>
+                        <label class="f-label">Nom du colis <span class="req">*</span></label>
+                        <input type="text" name="nom_colis[]" class="f-input" placeholder="Ex: Ordinateur Dell XPS" required>
+                    </div>
+                    <div>
+                        <label class="f-label">Commentaire</label>
+                        <input type="text" name="commentaire[]" class="f-input" placeholder="Ex: Bien emballé...">
+                    </div>
+                </div>
+            `;
+            conteneurColis.appendChild(bloc);
+        }
+    }
+
+    inputNbColis.addEventListener('input', genererBlocsColis);
+    genererBlocsColis();
+});
+</script>
 </body>
 </html>

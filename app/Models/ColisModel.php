@@ -22,15 +22,15 @@ class ColisModel {
         return $this->pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function creerColis($numeroBonCommande, $dateArrivee) {
+    public function creerColis($numeroBonCommande, $dateArrivee, $nomColis = null, $commentaire = null) {
     $stmtMax = $this->pdo->query("SELECT MAX(IdColis) FROM Colis");
     $maxId   = $stmtMax->fetchColumn();
     $newId   = $maxId ? ((int)$maxId + 1) : 1;
 
 
-    $sql  = "INSERT INTO Colis (IdColis, date_arrivee_prevu, IdStatut) VALUES (?, ?, (SELECT IdStatut FROM StatutColis WHERE Statut = 'en_cours'))";
+    $sql  = "INSERT INTO Colis (IdColis, nom_colis, date_arrivee_prevu, Commentaire, IdStatut) VALUES (?, ?, ?, ?, (SELECT IdStatut FROM StatutColis WHERE Statut = 'en_cours'))";
     $stmt = $this->pdo->prepare($sql);
-    $stmt->execute([$newId, $dateArrivee]);
+    $stmt->execute([$newId, $nomColis, $dateArrivee, $commentaire]);
 
     $liaisonRequest = "INSERT INTO Compose_une (IdColis, IdBonCommande)
                    SELECT ?, IdBonCommande FROM Commande WHERE NumeroBonCommande = ?";
