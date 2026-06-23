@@ -104,7 +104,5 @@ if ($role_session === 'Administrateur') {
 <div class="topbar">
   <div class="topbar-title">Suivi Colis <span>IUT de Villetaneuse</span></div>
   <div class="topbar-right">
-    <span style="font-size:12px;color:var(--text-light);"><?= htmlspecialchars($_SESSION['utilisateur_id'] ?? 'cas@uspn.fr') ?></span>
-    <button class="btn-icon" title="Notifications"><?= icon('bell') ?></button>
   </div>
 </div>
