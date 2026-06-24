@@ -63,11 +63,6 @@
                     <input type="file" name="ImageDevis" class="form-control" accept=".pdf, .jpg, .jpeg" required>
                 </div>
 
-                <div class="form-group">
-                    <label for="details">Détails sur le projet :</label>
-                    <textarea id="details" name="details" rows="4" class="form-control" placeholder="Justifiez votre besoin ici..."></textarea>
-                </div>
-
                 <div style="margin-top: 30px;">
                     <button type="submit" class="btn"><i class="fas fa-save"></i> Soumettre le devis</button>
                     <a href="index.php?action=pageInfosDevis" class="btn btn-blue" style="margin-left: 10px; background-color: var(--text-muted);">Annuler</a>

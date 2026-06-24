@@ -76,8 +76,10 @@ if ($role_session === 'Administrateur') {
     $menu_items = [
         ['index.php?action=accueil', 'home', 'Accueil', 'accueil'],
         ['index.php?action=formulaireDevis', 'file', 'Déposer un devis', 'formulaireDevis'],
-        ['index.php?action=pageInfosDevis', 'cart', 'Mes demandes', 'pageInfosDevis'],
+        ['index.php?action=pageInfosDevis', 'cart', 'Mes devis', 'pageInfosDevis'],
         ['index.php?action=afficherColis', 'box', 'Suivre un colis', 'afficherColis'],
+        ['index.php?action=afficherCommande', 'box','Mes commandes','afficherCommande'],
+        ['index.php?action=ajouterCommande','file','Ajouter une commande','ajouterCommande']
     ];
 }
 ?>
