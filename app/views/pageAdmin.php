@@ -39,6 +39,22 @@
                     <a class="btn btn-outline btn-sm" href="index.php?action=pageAjouterUtilisateur">Ajouter un compte</a>
                 </div>
             </div>
+
+            <div class="admin-block">
+                <div class="ab-header">
+                    <div class="ab-icon"><?= icon('plus', 16) ?></div>
+                    <div class="ab-title">Structures & Accès</div>
+                </div>
+                <div class="ab-desc">Gérez la création de nouveaux départements ou de nouveaux rôles.</div>
+                <div class="ab-actions">
+                    <a class="btn btn-primary btn-sm" href="index.php?action=pageVoirRoles">Voir les Rôles</a>
+                    <a class="btn btn-gold btn-sm" href="index.php?action=pageVoirDepartements">Voir les Dépts</a>
+                </div>
+            </div>
+            
+        </div>
+
+            
         </div>
 
         <div class="card">

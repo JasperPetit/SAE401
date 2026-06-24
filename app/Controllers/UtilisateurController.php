@@ -69,8 +69,15 @@ class UtilisateurController{
             }
         }
         $ListeDepartement = $this->DepartementModel->getAllDepartements();
+
+        // Ces deux lignes vont nous permettre de récupérer la liste des rôles 
+        $varRoles = $this->pdo->query("SELECT * FROM Role"); 
+        $listeRoles = $varRoles->fetchAll(\PDO::FETCH_ASSOC);
+
         require_once VIEWS . '/pageAjouterUtilisateur.php';
     }
+
+    
 
     // À SUPPRIMER PEUT ETRE IL FAUT VOIR SI C'EST VRAIMENT NÉCESSAIRE
     public function afficherAdmin(){
@@ -82,5 +89,40 @@ class UtilisateurController{
         $resListeUtilisateurs = $this->UtilisateurModel->getAllUtilisateurs();
         require_once VIEWS . '/pageVoirUtilisateurs.php';
     }
+
+    public function afficherListeRoles() {
+        $stmt = $this->pdo->query("SELECT * FROM Role");
+        $resListeRoles = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        require_once VIEWS . '/pageVoirRoles.php';
+    }
+
+    public function afficherListeDepartements() {
+        $resListeDepartements = $this->DepartementModel->getAllDepartements();
+        require_once VIEWS . '/pageVoirDepartements.php';
+    }
+
+    public function ajouterDepartement(){
+        
+        if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['nomDepartement'])){
+            $sql = $this->pdo->prepare("INSERT INTO Departement (NomDepartement) VALUES (?)");
+            $sql->execute([trim($_POST['nomDepartement'])]);
+            header("Location: index.php?action=pageAdmin&success=dep");
+            exit();
+        }
+        require_once VIEWS . '/pageAjouterDepartement.php';
+    }
+
+    public function ajouterRole(){
+        if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['nomRole'])){
+            $sql = $this->pdo->prepare("INSERT INTO Role (Role) VALUES (?)");
+            $sql->execute([trim($_POST['nomRole'])]);
+            header("Location: index.php?action=pageAdmin&success=role");
+            exit();
+
+        }
+        require_once VIEWS . '/pageAjouterRole.php';
+    }
 }
+
+    
 ?>

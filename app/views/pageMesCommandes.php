@@ -14,7 +14,9 @@
     <main class="main">
         <div class="content-header">
             <h1>Suivi de mes Commandes</h1>
-            <a href="index.php?action=AjouterCommande" class="btn btn-gold"><?= icon('plus', 14) ?> Nouvelle commande</a>
+           <?php if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'Administrateur'): ?> 
+                <a href="index.php?action=AjouterCommande" class="btn btn-gold"><?= icon('plus', 14) ?> Nouvelle commande</a>
+            <?php endif; ?>
         </div>
 
         <div class="search-row">

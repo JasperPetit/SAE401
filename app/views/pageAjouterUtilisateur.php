@@ -47,10 +47,11 @@
                         <label class="f-label">Rôle principal <span class="req">*</span></label>
                         <select id="role" name="Role" class="f-input" onchange="afficherDepartement()" required>
                             <option value="">-- Sélectionnez un rôle --</option>
-                            <option value="1">Administrateur</option>
-                            <option value="4">Demandeur (Professeur / Département)</option>
-                            <option value="3">Service Postal (Logistique)</option>
-                            <option value="2">Service Financier</option>
+                            <?php if(!empty($listeRoles)): foreach($listeRoles as $r): ?>
+                            <option value="<?= htmlspecialchars($r['IdRole'] ?? $r['Role']) ?>">
+                            <?= htmlspecialchars($r['Role']) ?>
+                            </option>
+                            <?php endforeach; endif; ?>
                         </select>
                     </div>
                     <div>
@@ -80,19 +81,22 @@
 
     <script>
         function afficherDepartement() {
-            var roleSelect = document.getElementById("role");
-            var divDepartement = document.getElementById("div-departement");
-            var selectDepartement = document.getElementById("departement");
+        var roleSelect = document.getElementById("role");
+        var divDepartement = document.getElementById("div-departement");
+        var selectDepartement = document.getElementById("departement");
 
-            if (roleSelect.value === "4") {
-                divDepartement.style.display = "block";
-                selectDepartement.required = true;
-            } else {
-                divDepartement.style.display = "none";
-                selectDepartement.required = false;
-                selectDepartement.value = "";
-            }
+       
+        var selectedText = roleSelect.options[roleSelect.selectedIndex].text.toLowerCase();
+
+        if (selectedText.includes("demandeur")) {
+            divDepartement.style.display = "block";
+            selectDepartement.required = true;
+        } else {
+            divDepartement.style.display = "none";
+            selectDepartement.required = false;
+            selectDepartement.value = "";
         }
+    }
     </script>
 </body>
 </html>
