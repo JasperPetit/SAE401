@@ -68,8 +68,15 @@ class UtilisateurController{
             }
         }
         $ListeDepartement = $this->DepartementModel->getAllDepartements();
+
+        // Ces deux lignes vont nous permettre de récupérer la liste des rôles 
+        $varRoles = $this->pdo->query("SELECT * FROM Role"); 
+        $listeRoles = $varRoles->fetchAll(\PDO::FETCH_ASSOC);
+
         require_once VIEWS . '/pageAjouterUtilisateur.php';
     }
+
+    
 
     // À SUPPRIMER PEUT ETRE IL FAUT VOIR SI C'EST VRAIMENT NÉCESSAIRE
     public function afficherAdmin(){
