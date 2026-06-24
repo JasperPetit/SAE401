@@ -11,8 +11,9 @@
 
 ## Sommaire
 - [Instruction](#Instrction)
-
-  
+- [Description](#Description)
+- [Prérequis](#Prérequis)
+- [Lancement](#Lancement)  
 
 ## Instruction
 - Ne jamais toucher au main.
