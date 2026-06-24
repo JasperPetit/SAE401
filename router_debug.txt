@@ -1,0 +1,8 @@
+Request Action: afficherCommande | Method: GET
+Request Action: afficherCommande | Method: GET
+Request Action: afficherCommande | Method: GET
+Request Action: afficherCommande | Method: GET
+Request Action: afficherCommande | Method: GET
+Request Action: SupprimerCommande | Method: POST
+Request Action: afficherCommande | Method: GET
+Request Action: afficherColis | Method: GET
