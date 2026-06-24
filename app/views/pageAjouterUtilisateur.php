@@ -16,6 +16,12 @@
             <p>Enregistrez un nouveau membre du personnel et affectez-lui un rôle spécifique</p>
         </div>
 
+        <?php if (!empty($erreur)): ?>
+            <div class="flash flash-error" style="margin-bottom: 20px;">
+                <?= htmlspecialchars($erreur) ?>
+            </div>
+        <?php endif; ?>
+
         <form method="POST" action="index.php?action=ajouterUtilisateur">
             <div class="card">
                 <div class="card-title" style="margin-bottom:14px;">Informations d'identité</div>
