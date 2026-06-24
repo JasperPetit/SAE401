@@ -28,7 +28,12 @@
             </div>
         <?php endif; ?>
 
-        <input type="text" id="searchBar" onkeyup="filtrer()" class="search-box" placeholder="Rechercher (nom, département, fournisseur...)">
+        <div class="search-row">
+            <div class="search-wrap">
+                <?= icon('search') ?>
+                <input type="text" id="searchBar" onkeyup="filtrer()" class="search-input" placeholder="Rechercher (nom, département, fournisseur...)">
+            </div>
+        </div>
 
         <div class="data-card-container">
             <table class="data-table">

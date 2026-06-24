@@ -10,7 +10,7 @@ if ($texte_saisi && isset($this) && method_exists($this, 'rechercherRapide')) {
 <div style="position: relative; display: inline-block;">
     <form action="index.php" method="GET" style="display: flex; gap: 10px;">
         <input type="hidden" name="action" value="<?= htmlspecialchars($_GET['action'] ?? 'accueil') ?>">
-        <input type="text" name="champ_recherche" class="search-box" style="margin-bottom: 0; width: 250px; padding: 8px 12px;" placeholder="Chercher un n°..." value="<?= htmlspecialchars($texte_saisi ?? '') ?>">
+        <input type="text" name="champ_recherche" class="search-input" style="margin-bottom: 0; width: 250px; padding: 8px 12px;" placeholder="Chercher un n°..." value="<?= htmlspecialchars($texte_saisi ?? '') ?>">
         <button type="submit" class="btn btn-blue" style="padding: 8px 12px;"><i class="fas fa-search"></i></button>
     </form>
 

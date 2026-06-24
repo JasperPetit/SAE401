@@ -54,10 +54,11 @@ class UtilisateurController{
             $role = $_POST['Role'] ?? '';
             $mdp = password_hash($_POST['mdpCAS'],PASSWORD_DEFAULT) ?? '';
             $departement = $_POST['departement'] ?? null;
+            $email = $_POST['email'] ?? '';
 
-            if (!empty($prenom) && !empty($nom) && !empty($role) && !empty($mdp)) {
+            if (!empty($prenom) && !empty($nom) && !empty($role) && !empty($mdp) && !empty($email)) {
                 try {
-                    $this->UtilisateurModel->ajouterUtilisateur($prenom, $nom, $role, $mdp, $departement);
+                    $this->UtilisateurModel->ajouterUtilisateur($prenom, $nom, $role, $mdp, $departement, $email);
                     header("Location: index.php?action=pageVoirUtilisateurs");
                     exit();
                 } catch (Exception $e) {

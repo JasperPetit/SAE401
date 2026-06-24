@@ -67,7 +67,7 @@ class ColisController{
             }
 
             // Redirection
-            header('Location: index.php?action=afficherColisPostale');
+            header('Location: index.php?action=afficherColis');
             exit();
         }
 

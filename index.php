@@ -22,6 +22,9 @@ define('CONTROLLERS', ROOT . '/app/Controllers');
 // 2. Chargement de l'Autoloader pour instancier les classes automatiquement
 
 require_once __DIR__ . '/app/autoload.php';
+if (file_exists(__DIR__ . '/vendor/autoload.php')) {
+    require_once __DIR__ . '/vendor/autoload.php';
+}
 
 // 3. Connexion centralisée à la Base de Données (PDO)
 try {
@@ -131,6 +134,11 @@ switch ($action) {
     case 'ModifierCommande':
         $controller = new \App\Controllers\CommandeController($db);
         $controller->modifierCommande();
+        break;
+
+    case 'validerLivraisonCommande':
+        $controller = new \App\Controllers\CommandeController($db);
+        $controller->validerLivraisonCommande();
         break;
 
     // === GESTION DES COLIS ===
