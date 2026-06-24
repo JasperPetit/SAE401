@@ -16,7 +16,12 @@
             <a href="index.php?action=formulaireDevis" class="btn"><i class="fas fa-plus-circle"></i> Déposer un nouveau devis</a>
         </div>
 
-        <input type="text" id="searchBar" onkeyup="filtrerCommandes()" class="search-box" placeholder="Rechercher un projet par nom...">
+        <div class="search-row">
+            <div class="search-wrap">
+                <?= icon('search') ?>
+                <input type="text" id="searchBar" onkeyup="filtrerCommandes()" class="search-input" placeholder="Rechercher un projet par nom...">
+            </div>
+        </div>
 
         <div id="listeDevis" style="display: flex; flex-direction: column; gap: 15px;">
             <?php if (!empty($listeDevis)): ?>

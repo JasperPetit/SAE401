@@ -53,8 +53,13 @@ class CommandeController{
                         $this->CommandeModel->addCommande($NumeroBonDeCommande, $AdresseDepart, $AdresseArivee, $dateDepart, $nbColis, $idDevis, $dateArrivee, $nomFichier);
                         
                         // Création automatique des colis
+                        $nomsColis = $_POST['nom_colis'] ?? [];
+                        $commentairesColis = $_POST['commentaire'] ?? [];
+
                         for ($i = 0; $i < $nbColis; $i++) {
-                            $this->ColisModel->creerColis($NumeroBonDeCommande, $dateArrivee);
+                            $nomColis = $nomsColis[$i] ?? null;
+                            $commentaire = $commentairesColis[$i] ?? null;
+                            $this->ColisModel->creerColis($NumeroBonDeCommande, $dateArrivee, $nomColis, $commentaire);
                         }
 
                         header("Location: index.php?action=afficherCommande&success=1");

@@ -41,10 +41,10 @@
             <?php if (!empty($dernierColis)): ?>
                 <div style="padding: 25px;">
                     <p style="font-size: 1.2rem; color: var(--success); font-weight: bold; margin-bottom: 10px;">
-                        <i class="fas fa-check-circle"></i> Livré le <?= htmlspecialchars($dernierColis["Date_"] ?? 'Date inconnue') ?>
+                        <i class="fas fa-check-circle"></i> Livré le <?= htmlspecialchars($dernierColis["DateAjout"] ?? 'Date inconnue') ?>
                     </p>
                     <p style="font-size: 1rem; color: var(--text-dark);">
-                        Bon de commande : <strong>nº <?= htmlspecialchars($dernierColis["NumeroBonDeCommande"] ?? '') ?></strong>
+                        Bon de commande : <strong>nº <?= htmlspecialchars($dernierColis["NumeroBonCommande"] ?? 'Inconnu') ?></strong>
                     </p>
                 </div>
             <?php else: ?>

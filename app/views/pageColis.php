@@ -21,6 +21,7 @@
                 <thead>
                     <tr>
                         <th>Référence</th>
+                        <th>Nom du colis</th>
                         <th>Destinataire</th>
                         <th>Département</th>
                         <th>Date Prévue</th>
@@ -47,6 +48,7 @@
                         ?>
                         <tr>
                             <td style="font-weight:600; color:var(--navy);">#<?= htmlspecialchars($colis['NumeroBonCommande'] ?? '') ?></td>
+                            <td><?= htmlspecialchars($colis['nom_colis'] ?? 'N/A') ?></td>
                             <td><?= htmlspecialchars(($colis['Prenom'] ?? '') . ' ' . ($colis['Nom'] ?? '')) ?></td>
                             <td>
                                 <span class="badge badge-blue" style="font-size:10.5px;">
