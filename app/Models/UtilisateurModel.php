@@ -29,21 +29,22 @@ class utilisateurModel {
         return $stmt->execute([':id' => $id]);
     }
 
-    function ajouterUtilisateur($prenom, $nom, $roles, $mdp, $departements){
+    function ajouterUtilisateur($prenom, $nom, $roles, $mdp, $departements, $email){
         try {
             // Génération automatique de l'identifiant CAS (ex: amartin pour Alice Martin)
             $identifiant = strtolower(substr($prenom, 0, 1) . str_replace(' ', '', $nom));
 
             $this->pdo->beginTransaction();
-            $sqlUser = "INSERT INTO Utilisateur(Nom, Prenom, mdpCas, Identifiant)
-                        VALUES (:nom,:prenom,:mdp,:id)";
+            $sqlUser = "INSERT INTO Utilisateur(Nom, Prenom, mdpCas, Identifiant, Email)
+                        VALUES (:nom,:prenom,:mdp,:id,:email)";
 
             $stmt = $this->pdo->prepare($sqlUser);
             $stmt->execute([
                 ':nom' => $nom,
                 ':prenom' => $prenom,
                 ':mdp' => $mdp,
-                ':id' => $identifiant
+                ':id' => $identifiant,
+                ':email' => $email
             ]);
 
             // Récupérer l'ID auto-incrémenté créé par SQLite

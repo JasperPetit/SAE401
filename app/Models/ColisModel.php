@@ -22,15 +22,15 @@ class ColisModel {
         return $this->pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function creerColis($numeroBonCommande, $dateArrivee) {
+    public function creerColis($numeroBonCommande, $dateArrivee, $nomColis = null, $commentaire = null) {
     $stmtMax = $this->pdo->query("SELECT MAX(IdColis) FROM Colis");
     $maxId   = $stmtMax->fetchColumn();
     $newId   = $maxId ? ((int)$maxId + 1) : 1;
 
 
-    $sql  = "INSERT INTO Colis (IdColis, date_arrivee_prevu, IdStatut) VALUES (?, ?, (SELECT IdStatut FROM StatutColis WHERE Statut = 'en_cours'))";
+    $sql  = "INSERT INTO Colis (IdColis, nom_colis, date_arrivee_prevu, Commentaire, IdStatut) VALUES (?, ?, ?, ?, (SELECT IdStatut FROM StatutColis WHERE Statut = 'en_cours'))";
     $stmt = $this->pdo->prepare($sql);
-    $stmt->execute([$newId, $dateArrivee]);
+    $stmt->execute([$newId, $nomColis, $dateArrivee, $commentaire]);
 
     $liaisonRequest = "INSERT INTO Compose_une (IdColis, IdBonCommande)
                    SELECT ?, IdBonCommande FROM Commande WHERE NumeroBonCommande = ?";
@@ -38,7 +38,7 @@ class ColisModel {
     return $stmtLiaison->execute([$newId, $numeroBonCommande]);
 }
 
-    public function marquerCommeLivre($idColis, $idCommande) {
+    public function marquerCommeLivre($idColis, $numeroBonCommande) {
         $stmt = $this->pdo->prepare(
             "UPDATE Colis SET IdStatut = (SELECT IdStatut FROM StatutColis WHERE Statut = 'livré')
              WHERE IdColis = :idColis"
@@ -50,14 +50,15 @@ class ColisModel {
              FROM Colis co
              JOIN StatutColis sc ON co.IdStatut = sc.IdStatut
              JOIN Compose_une CU ON co.IdColis = CU.IdColis
-             WHERE CU.IdBonCommande = :idCommande"
+             JOIN Commande C ON CU.IdBonCommande = C.IdBonCommande
+             WHERE C.NumeroBonCommande = :numeroBonCommande"
         );
-        $stmtCheck->execute([':idCommande' => $idCommande]);
+        $stmtCheck->execute([':numeroBonCommande' => $numeroBonCommande]);
         $tousLesColis = $stmtCheck->fetchAll(PDO::FETCH_ASSOC);
 
         $tousLivres = true;
         foreach ($tousLesColis as $colis) {
-            if ($colis['Statut'] !== 'livré') {
+            if (strtolower($colis['Statut']) !== 'livré' && strtolower($colis['Statut']) !== 'livre') {
                 $tousLivres = false;
                 break;
             }
@@ -66,9 +67,23 @@ class ColisModel {
         $nouveauStatut = $tousLivres ? 'livré' : 'en_cours';
         $stmtUpdate = $this->pdo->prepare(
             "UPDATE Commande SET IdStatut = (SELECT IdStatut FROM StatutCommande WHERE Statut = :statut)
-             WHERE IdBonCommande = :idCommande"
+             WHERE NumeroBonCommande = :numeroBonCommande"
         );
-        $stmtUpdate->execute([':statut' => $nouveauStatut, ':idCommande' => $idCommande]);
+        $stmtUpdate->execute([':statut' => $nouveauStatut, ':numeroBonCommande' => $numeroBonCommande]);
+
+        if ($tousLivres) {
+            $stmtEmail = $this->pdo->prepare("SELECT U.Email, U.Prenom, C.NumeroBonCommande FROM Commande C JOIN Devis D ON C.IdDevis = D.IdDevis JOIN Utilisateur U ON D.IdUtilisateur = U.IdUtilisateur WHERE C.NumeroBonCommande = ?");
+            $stmtEmail->execute([$numeroBonCommande]);
+            $info = $stmtEmail->fetch(PDO::FETCH_ASSOC);
+
+            if ($info && !empty($info['Email'])) {
+                \App\Services\EmailService::sendEmail(
+                    $info['Email'],
+                    "Commande Livrée : " . $info['NumeroBonCommande'],
+                    "Bonjour " . htmlspecialchars($info['Prenom']) . ",<br><br>Tous les colis ont été réceptionnés ! Votre commande <strong>" . htmlspecialchars($info['NumeroBonCommande']) . "</strong> est désormais marquée comme <strong>livrée</strong> par le service postal."
+                );
+            }
+        }
     }
 
     public function getColisById($idColis) {

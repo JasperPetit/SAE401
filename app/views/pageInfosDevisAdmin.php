@@ -15,7 +15,12 @@
             <h1><i class="fas fa-signature"></i> Espace Direction - Validation</h1>
         </div>
 
-        <input type="text" id="searchBar" onkeyup="filtrer()" class="search-box" placeholder="Rechercher un document...">
+        <div class="search-row">
+            <div class="search-wrap">
+                <?= icon('search') ?>
+                <input type="text" id="searchBar" onkeyup="filtrer()" class="search-input" placeholder="Rechercher un document...">
+            </div>
+        </div>
 
         <div class="data-card-container">
             <table class="data-table">

@@ -110,5 +110,27 @@ class CommandeModel {
         return $query->execute([$IdDevis, $adresseDepart, $adresseArivee, $dateArriveeSaisie, $numero]);
     }
 
+    public function marquerCommandeCommeLivree($numeroBonCommande) {
+        $sql = "UPDATE Commande SET IdStatut = (SELECT IdStatut FROM StatutCommande WHERE Statut = 'livré' OR Statut = 'livre') WHERE NumeroBonCommande = ?";
+        $this->pdo->prepare($sql)->execute([$numeroBonCommande]);
+        
+        $sqlColis = "UPDATE Colis SET IdStatut = (SELECT IdStatut FROM StatutColis WHERE Statut = 'livré' OR Statut = 'livre') 
+                     WHERE IdColis IN (SELECT IdColis FROM Compose_une WHERE IdBonCommande = 
+                         (SELECT IdBonCommande FROM Commande WHERE NumeroBonCommande = ?))";
+        $this->pdo->prepare($sqlColis)->execute([$numeroBonCommande]);
+
+        $stmtEmail = $this->pdo->prepare("SELECT U.Email, U.Prenom, C.NumeroBonCommande FROM Commande C JOIN Devis D ON C.IdDevis = D.IdDevis JOIN Utilisateur U ON D.IdUtilisateur = U.IdUtilisateur WHERE C.NumeroBonCommande = ?");
+        $stmtEmail->execute([$numeroBonCommande]);
+        $info = $stmtEmail->fetch(PDO::FETCH_ASSOC);
+
+        if ($info && !empty($info['Email'])) {
+            \App\Services\EmailService::sendEmail(
+                $info['Email'],
+                "Commande Livrée : " . $info['NumeroBonCommande'],
+                "Bonjour " . htmlspecialchars($info['Prenom']) . ",<br><br>Bonne nouvelle ! Votre commande <strong>" . htmlspecialchars($info['NumeroBonCommande']) . "</strong> a été intégralement réceptionnée par le service postal et est désormais marquée comme <strong>livrée</strong>."
+            );
+        }
+    }
+
 }
 ?>

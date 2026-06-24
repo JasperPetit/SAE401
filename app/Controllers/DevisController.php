@@ -42,7 +42,7 @@ class DevisController{
                 header('Location: index.php?action=pageInfosDevis&success=1');
             }
             elseif (isset($_SESSION['role']) && $_SESSION['role']=='Demandeur'){
-                header('Location: PageInfosDevisDemandeur');
+                header('Location: index.php?action=pageInfosDevis&success=1');
             } else {
                 header('Location: index.php?action=pageInfosDevis&success=1');
             }
@@ -184,6 +184,18 @@ class DevisController{
         if (isset($_GET['id'])) {
             $idDevis = $_GET['id'];
             $this->DevisModel->updateStatutDevis($idDevis, 2); // 2 = Validé
+
+            // Envoi de l'email au demandeur
+            $stmt = $this->pdo->prepare("SELECT U.Email, D.numeroDevis, U.Prenom, U.Nom FROM Devis D JOIN Utilisateur U ON D.IdUtilisateur = U.IdUtilisateur WHERE D.IdDevis = ?");
+            $stmt->execute([$idDevis]);
+            $info = $stmt->fetch(PDO::FETCH_ASSOC);
+            if ($info && !empty($info['Email'])) {
+                \App\Services\EmailService::sendEmail(
+                    $info['Email'],
+                    "Devis Accepté : " . $info['numeroDevis'],
+                    "Bonjour " . htmlspecialchars($info['Prenom']) . ",<br><br>Votre devis <strong>" . htmlspecialchars($info['numeroDevis']) . "</strong> a été <strong>accepté</strong> par le service financier.<br>Vous pouvez maintenant procéder à la création de la commande correspondante."
+                );
+            }
         }
         // Redirection vers la liste
         header('Location: index.php?action=pageInfosDevis');
@@ -195,6 +207,18 @@ class DevisController{
         if (isset($_GET['id'])) {
             $idDevis = $_GET['id'];
             $this->DevisModel->updateStatutDevis($idDevis, 3); // 3 = Refusé
+
+            // Envoi de l'email au demandeur
+            $stmt = $this->pdo->prepare("SELECT U.Email, D.numeroDevis, U.Prenom, U.Nom FROM Devis D JOIN Utilisateur U ON D.IdUtilisateur = U.IdUtilisateur WHERE D.IdDevis = ?");
+            $stmt->execute([$idDevis]);
+            $info = $stmt->fetch(PDO::FETCH_ASSOC);
+            if ($info && !empty($info['Email'])) {
+                \App\Services\EmailService::sendEmail(
+                    $info['Email'],
+                    "Devis Refusé : " . $info['numeroDevis'],
+                    "Bonjour " . htmlspecialchars($info['Prenom']) . ",<br><br>Votre devis <strong>" . htmlspecialchars($info['numeroDevis']) . "</strong> a été <strong>refusé</strong> par le service financier."
+                );
+            }
         }
         // Redirection vers la liste
         header('Location: index.php?action=pageInfosDevis');
