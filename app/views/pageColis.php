@@ -35,14 +35,14 @@
                     <?php if (!empty($resListeColis)): ?>
                         <?php foreach ($resListeColis as $colis): 
                             $statut = strtolower($colis['Statut'] ?? 'en_cours');
-                            $classe_badge = 'badge-warning';
+                            $classe_badge = 'badge-blue';
                             $statut_texte = 'En transit';
 
                             if ($statut == 'livré' || $statut == 'livre') {
-                                $classe_badge = 'badge-success';
+                                $classe_badge = 'badge-green';
                                 $statut_texte = 'Livré';
                             } elseif ($statut == 'retard') {
-                                $classe_badge = 'badge-danger';
+                                $classe_badge = 'badge-red';
                                 $statut_texte = 'En retard';
                             }
                         ?>

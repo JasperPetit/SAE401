@@ -48,14 +48,14 @@
                             <?php 
                                 // Correspondance dynamique des badges selon ton modèle
                                 $statut = strtolower($commande['Statut'] ?? 'en_cours');
-                                $badgeClass = 'badge-warning';
+                                $badgeClass = 'badge-orange';
                                 $texteStatut = 'En cours';
                                 
                                 if ($statut === 'livré' || $statut === 'livre') {
-                                    $badgeClass = 'badge-success';
+                                    $badgeClass = 'badge-green';
                                     $texteStatut = 'Livré';
                                 } elseif ($statut === 'retard') {
-                                    $badgeClass = 'badge-danger';
+                                    $badgeClass = 'badge-red';
                                     $texteStatut = 'En retard';
                                 }
                             ?>
