@@ -41,6 +41,8 @@ try {
 // 4. Interception de l'action demandée dans l'URL (Login par défaut)
 $action = $_GET['action'] ?? 'login';
 
+file_put_contents("/var/www/html/SAE401/router_debug.txt", "Request Action: " . $action . " | Method: " . $_SERVER['REQUEST_METHOD'] . "\n", FILE_APPEND);
+
 // 5. Restriction d'accès : Si l'utilisateur n'est pas connecté, on le force à rester sur le login
 $actions_publiques = ['login', 'connexion'];
 if (!isset($_SESSION['utilisateur_id']) && !in_array($action, $actions_publiques)) {
@@ -126,6 +128,7 @@ switch ($action) {
         }
         break;
 
+    case 'ajouterCommande':
     case 'AjouterCommande':
         $controller = new \App\Controllers\CommandeController($db);
         $controller->ajouterCommande();
@@ -139,6 +142,15 @@ switch ($action) {
     case 'validerLivraisonCommande':
         $controller = new \App\Controllers\CommandeController($db);
         $controller->validerLivraisonCommande();
+        break;
+
+    case 'SupprimerCommande':
+        $controller = new \App\Controllers\CommandeController($db);
+        if (method_exists($controller, 'supprimerCommande')) {
+            $controller->supprimerCommande();
+        } else {
+            header('Location: index.php?action=afficherCommande');
+        }
         break;
 
     // === GESTION DES COLIS ===
@@ -156,6 +168,15 @@ switch ($action) {
     case 'validerLivraison':
         $controller = new \App\Controllers\ColisController($db);
         $controller->validerLivraison();
+        break;
+
+    case 'supprimerColis':
+        $controller = new \App\Controllers\ColisController($db);
+        if (method_exists($controller, 'supprimerColis')) {
+            $controller->supprimerColis();
+        } else {
+            header('Location: index.php?action=afficherColis');
+        }
         break;
 
     case 'imprimer':

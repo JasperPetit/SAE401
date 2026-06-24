@@ -1,0 +1,3 @@
+supprimerCommande called. METHOD: POST
+NumeroBonDeCommande to delete: Luka 24 juin demandeur info
+Deletion successful for: Luka 24 juin demandeur info

@@ -34,6 +34,7 @@ if (!function_exists('icon')) {
             'search' => '<circle cx="11" cy="11" r="6.5"/><path d="m20.5 20.5-4.9-4.9"/>',
             'logout' => '<path d="M9.5 21H5.2A1.7 1.7 0 0 1 3.5 19.3V4.7A1.7 1.7 0 0 1 5.2 3h4.3"/><path d="m15.5 16.5 4.5-4.5-4.5-4.5"/><path d="M20 12H9.5"/>',
             'file' => '<path d="M14 2.8H6.5A1.7 1.7 0 0 0 4.8 4.5v15A1.7 1.7 0 0 0 6.5 21.2h11a1.7 1.7 0 0 0 1.7-1.7V8Z"/><path d="M14 2.8V8h5.2"/><path d="M8.5 12.5h7M8.5 16h7"/>',
+            'edit' => '<path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>',
         ];
         return '<svg width="' . $s . '" height="' . $s . '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">' . ($P[$name] ?? '') . '</svg>';
     }
@@ -61,7 +62,6 @@ if ($role_session === 'Administrateur') {
     $badge_text = 'SERVICE POSTAL';
     $menu_items = [
         ['index.php?action=accueil', 'home', 'Tableau de bord', 'accueil'],
-        ['index.php?action=afficherColis', 'scan', 'Scanner un colis', 'afficherColis'],
         ['index.php?action=nouveau', 'send', 'Nouvel envoi', 'nouveau'],
         ['index.php?action=suivi', 'box', 'Suivi des colis', 'suivi'],
     ];

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Supervision des Commandes — Admin</title>
+    <title>Suivi Global des Commandes — Admin</title>
     <link rel="stylesheet" href="public/css/style.css">
 </head>
 <body class="service-admin">
@@ -12,47 +12,121 @@
 
     <main class="main">
         <div class="page-header">
-            <h1>Supervision des Commandes</h1>
-            <p>Rôle ADMIN : vue globale et résolution des flux de commandes de l'IUT</p>
         </div>
 
-        <?php if (!empty($resListeCommandes)): ?>
-            <?php foreach ($resListeCommandes as $c): ?>
-            <div class="card" style="padding:16px 20px;">
-                <div style="display:flex; align-items:center; gap:14px; flex-wrap:wrap;">
-                    <div class="list-item" style="padding:0; border:none; flex:1; min-width:220px;">
-                        <div class="li-icon" style="background:#dbeafe; color:var(--blue);"><?= icon('box', 16) ?></div>
-                        <div class="li-info">
-                            <div class="li-title"><?= htmlspecialchars($c['NumeroBonCommande'] ?? $c['NumeroBonDeCommande'] ?? '') ?></div>
-                            <div class="li-meta">
-                                Fournisseur : <?= htmlspecialchars($c['NomFournisseur'] ?? '-') ?> &nbsp;·&nbsp;
-                                <strong style="color:var(--navy);"><?= htmlspecialchars($c['DateAjout'] ?? '') ?></strong>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <form method="POST" action="index.php?action=ModifierCommande" style="display:flex; gap:6px;">
-                        <input type="hidden" name="NumeroBonDeCommande" value="<?= htmlspecialchars($c['NumeroBonCommande'] ?? $c['NumeroBonDeCommande'] ?? '') ?>">
-                        <select class="f-input" name="statut" style="width:200px; padding:6px 9px; font-size:12px;">
-                            <?php 
-                            $statuts = ['en_cours', 'livré', 'retard'];
-                            foreach ($statuts as $s): 
-                                $selected = (($c['Statut'] ?? '') === $s) ? 'selected' : '';
-                            ?>
-                                <option value="<?= $s ?>" <?= $selected ?>><?= ucfirst($s) ?></option>
-                            <?php endforeach; ?>
-                        </select>
-                        <button class="btn btn-outline btn-sm" type="submit">Appliquer</button>
-                    </form>
-                </div>
-            </div>
-            <?php endforeach; ?>
-        <?php else: ?>
-            <div class="card">
-                <p class="empty-state">Aucune commande n'est actuellement enregistrée dans le système.</p>
+        <?php if (!empty($erreur)): ?>
+            <div class="flash flash-error" style="margin-bottom: 20px;">
+                <?= htmlspecialchars($erreur) ?>
             </div>
         <?php endif; ?>
+
+        <div class="card">
+            <div class="card-title" style="margin-bottom:14px;">Modifier la commande <?= htmlspecialchars($commande['NumeroBonCommande'] ?? $commande['NumeroBonDeCommande'] ?? '') ?></div>
+            <form action="index.php?action=ModifierCommande" method="POST" enctype="multipart/form-data">
+                
+                <div class="form-grid">
+                    <div>
+                        <label class="f-label">Numéro de commande <span class="req">*</span></label>
+                        <input type="hidden" name="ancienNumeroBonDeCommande" value="<?= htmlspecialchars($commande['NumeroBonCommande'] ?? $commande['NumeroBonDeCommande'] ?? '') ?>">
+                        <input type="text" name="NumeroBonDeCommande" class="f-input" value="<?= htmlspecialchars($commande['NumeroBonCommande'] ?? $commande['NumeroBonDeCommande'] ?? '') ?>" required>
+                    </div>
+                    <div>
+                        <label class="f-label">Date de commande <span class="req">*</span></label>
+                        <input type="date" name="DateArrivee" class="f-input" value="<?= htmlspecialchars($commande['DateAjout'] ?? '') ?>" required>
+                    </div>
+                </div>
+
+                <div class="form-grid" style="margin-top:14px;">
+                    <div>
+                        <label class="f-label">Devis associé <span class="req">*</span></label>
+                        <select name="idDevis" class="f-input" required>
+                            <option value="">Choisir un devis</option>
+                            <?php if(!empty($listeDevis)): foreach ($listeDevis as $devis): ?>
+                                <option value="<?= $devis['IdDevis'] ?>" <?= ($commande['IdDevis'] == $devis['IdDevis']) ? 'selected' : '' ?>>Devis n°<?= htmlspecialchars($devis['numeroDevis']) ?> (<?= htmlspecialchars($devis['Prix'] ?? '') ?>€)</option>
+                            <?php endforeach; endif; ?>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-grid" style="margin-top:14px;">
+                    <div>
+                        <label class="f-label">Adresse de départ (Fournisseur) <span class="req">*</span></label>
+                        <input type="text" name="AdresseDepart" class="f-input" value="<?= htmlspecialchars($commande['AdresseDepart'] ?? '') ?>" required>
+                    </div>
+                    <div>
+                        <label class="f-label">Adresse d'arrivée (IUT) <span class="req">*</span></label>
+                        <input type="text" name="AdresseArivee" class="f-input" value="<?= htmlspecialchars($commande['AdresseArivee'] ?? 'IUT Villetaneuse, 99 Av. Jean Baptiste Clément, 93430 Villetaneuse') ?>" required>
+                    </div>
+                </div>
+
+                <div class="form-grid" style="margin-top:14px;">
+                    <div>
+                        <label class="f-label">Nombre de colis attendus <span class="req">*</span></label>
+                        <input type="number" name="nbColis" id="nbColis" min="1" value="<?= count($listeColisExistant ?? []) ?: 1 ?>" class="f-input" required>
+                    </div>
+                    <div>
+                        <label class="f-label">Bon de commande (PDF/JPG)
+                            <?php if (!empty($commande['ImageBonDeCommande'])): ?>
+                                <small style="color:var(--gray);">(Fichier actuel : <?= htmlspecialchars($commande['ImageBonDeCommande']) ?>)</small>
+                            <?php endif; ?>
+                        </label>
+                        <input type="file" name="ImageCommande" class="f-input" accept=".pdf, .jpg, .jpeg">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="details" class="f-label">Détails sur le projet :</label>
+                    <textarea id="details" name="details" rows="4" class="form-control" placeholder="details ..."></textarea>
+                </div>
+
+                <div id="conteneur-colis" style="margin-top: 14px;"></div>
+
+                <div class="actions-row" style="margin-top:20px;">
+                    <button type="submit" class="btn btn-gold"><?= icon('send', 14) ?> Mettre à jour la commande</button>
+                    <a href="index.php?action=afficherCommande" class="btn btn-outline">Annuler</a>
+                </div>
+            </form>
+        </div>
     </main>
 
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const inputNbColis = document.getElementById('nbColis');
+    const conteneurColis = document.getElementById('conteneur-colis');
+    const colisExistants = <?= json_encode($listeColisExistant ?? []) ?>;
+
+    function genererBlocsColis() {
+        conteneurColis.innerHTML = '';
+        const nb = parseInt(inputNbColis.value) || 1;
+        
+        for (let i = 1; i <= nb; i++) {
+            const colis = colisExistants[i-1] || {nom_colis: '', Commentaire: ''};
+            const bloc = document.createElement('div');
+            bloc.style.marginTop = '14px';
+            bloc.style.padding = '14px';
+            bloc.style.border = '1px solid #e0e0e0';
+            bloc.style.borderRadius = '6px';
+            bloc.style.backgroundColor = '#f9f9f9';
+            
+            bloc.innerHTML = `
+                <div class="card-title" style="margin-bottom:10px; font-size: 14px;">Colis ${i}</div>
+                <div class="form-grid">
+                    <div>
+                        <label class="f-label">Nom du colis</label>
+                        <input type="text" name="nom_colis[]" class="f-input" value="${colis.nom_colis || ''}" placeholder="Ex: Ordinateur Dell XPS">
+                    </div>
+                    <div>
+                        <label class="f-label">Commentaire</label>
+                        <input type="text" name="commentaire[]" class="f-input" value="${colis.Commentaire || ''}" placeholder="Ex: Bien emballé...">
+                    </div>
+                </div>
+            `;
+            conteneurColis.appendChild(bloc);
+        }
+    }
+
+    inputNbColis.addEventListener('input', genererBlocsColis);
+    genererBlocsColis();
+});
+</script>
 </body>
 </html>

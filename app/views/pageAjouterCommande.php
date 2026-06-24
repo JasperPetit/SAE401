@@ -14,6 +14,12 @@
         <div class="page-header">
         </div>
 
+        <?php if (!empty($erreur)): ?>
+            <div class="flash flash-error" style="margin-bottom: 20px;">
+                <?= htmlspecialchars($erreur) ?>
+            </div>
+        <?php endif; ?>
+
         <div class="card">
             <div class="card-title" style="margin-bottom:14px;">Enregistrer une nouvelle commande</div>
             <form action="index.php?action=AjouterCommande" method="POST" enctype="multipart/form-data">
@@ -98,8 +104,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 <div class="card-title" style="margin-bottom:10px; font-size: 14px;">Colis ${i}</div>
                 <div class="form-grid">
                     <div>
-                        <label class="f-label">Nom du colis <span class="req">*</span></label>
-                        <input type="text" name="nom_colis[]" class="f-input" placeholder="Ex: Ordinateur Dell XPS" required>
+                        <label class="f-label">Nom du colis</label>
+                        <input type="text" name="nom_colis[]" class="f-input" placeholder="Ex: Ordinateur Dell XPS">
                     </div>
                     <div>
                         <label class="f-label">Commentaire</label>

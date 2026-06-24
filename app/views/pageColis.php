@@ -26,8 +26,8 @@
                         <th>Département</th>
                         <th>Date Prévue</th>
                         <th>Statut</th>
-                        <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'Service_Postal'): ?>
-                        <th>Action</th>
+                        <?php if (isset($_SESSION['role']) && in_array($_SESSION['role'], ['Service_Postal', 'Administrateur'])): ?>
+                        <th>Actions</th>
                         <?php endif; ?>
                     </tr>
                 </thead>
@@ -57,14 +57,25 @@
                             </td>
                             <td><?= htmlspecialchars($colis['date_arrivee_prevu'] ?? 'N/A') ?></td>
                             <td><span class="badge <?= $classe_badge ?>"><?= $statut_texte ?></span></td>
-                            <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'Service_Postal'): ?>
-                            <td>
-                                <?php if ($statut !== 'livré' && $statut !== 'livre'): ?>
+                            <?php if (isset($_SESSION['role']) && in_array($_SESSION['role'], ['Service_Postal', 'Administrateur'])): ?>
+                            <td style="white-space: nowrap;">
+                                <?php if ($_SESSION['role'] === 'Service_Postal' && $statut !== 'livré' && $statut !== 'livre'): ?>
                                 <form action="index.php?action=validerLivraison" method="POST" style="display:inline;">
                                     <input type="hidden" name="id" value="<?= htmlspecialchars($colis['IdColis'] ?? '') ?>">
                                     <input type="hidden" name="idCommande" value="<?= htmlspecialchars($colis['NumeroBonCommande'] ?? '') ?>">
-                                    <button type="submit" class="btn btn-green" style="padding: 4px 8px; font-size: 0.8rem; background-color: #10b981; border-color: #10b981; color: white;">
-                                        <i class="fas fa-check"></i> Livrer
+                                    <button type="submit" class="btn btn-green" style="padding: 4px 8px; font-size: 0.8rem; background-color: #10b981; border-color: #10b981; color: white;" title="Livrer">
+                                        <?= icon('check', 14) ?>
+                                    </button>
+                                </form>
+                                <?php endif; ?>
+                                <?php if ($_SESSION['role'] === 'Administrateur'): ?>
+                                <a href="index.php?action=modifierColis&idColis=<?= htmlspecialchars($colis['IdColis'] ?? '') ?>" class="btn btn-outline" style="padding: 4px 8px; font-size: 0.8rem; color: var(--blue); border-color: var(--blue);" title="Modifier">
+                                    <?= icon('edit', 14) ?>
+                                </a>
+                                <form action="index.php?action=supprimerColis" method="POST" style="display:inline;">
+                                    <input type="hidden" name="idColis" value="<?= htmlspecialchars($colis['IdColis'] ?? '') ?>">
+                                    <button type="submit" class="btn btn-outline" style="padding: 4px 8px; font-size: 0.8rem; color: var(--red); border-color: var(--red);" title="Supprimer">
+                                        <?= icon('trash', 14) ?>
                                     </button>
                                 </form>
                                 <?php endif; ?>

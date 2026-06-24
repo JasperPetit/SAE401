@@ -37,8 +37,8 @@
                         <th>Adresse d'Arrivée</th>
                         <th>Date d'Ajout</th>
                         <th>Statut Livraison</th>
-                        <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'Service_Postal'): ?>
-                        <th>Action</th>
+                        <?php if (isset($_SESSION['role']) && in_array($_SESSION['role'], ['Service_Postal', 'Administrateur'])): ?>
+                        <th>Actions</th>
                         <?php endif; ?>
                     </tr>
                 </thead>
@@ -68,13 +68,25 @@
                                 <td><i class="fas fa-location-dot" style="color: var(--primary-blue); margin-right: 5px;"></i> <?= htmlspecialchars($commande['AdresseArivee'] ?? '') ?></td>
                                 <td><?= htmlspecialchars($commande['DateAjout'] ?? 'N/A') ?></td>
                                 <td><span class="badge <?= $badgeClass ?>"><?= $texteStatut ?></span></td>
-                                <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'Service_Postal'): ?>
-                                <td>
-                                    <?php if ($statut !== 'livré' && $statut !== 'livre'): ?>
+                                <?php if (isset($_SESSION['role']) && in_array($_SESSION['role'], ['Service_Postal', 'Administrateur'])): ?>
+                                <td style="white-space: nowrap;">
+                                    <?php if ($_SESSION['role'] === 'Service_Postal' && $statut !== 'livré' && $statut !== 'livre'): ?>
                                     <form action="index.php?action=validerLivraisonCommande" method="POST" style="display:inline;">
                                         <input type="hidden" name="NumeroBonCommande" value="<?= htmlspecialchars($commande['NumeroBonCommande'] ?? $commande['NumeroBonDeCommande'] ?? '') ?>">
-                                        <button type="submit" class="btn btn-green" style="padding: 4px 8px; font-size: 0.8rem; background-color: #10b981; border-color: #10b981; color: white;">
-                                            <i class="fas fa-check"></i> Livrer
+                                        <button type="submit" class="btn btn-green" style="padding: 4px 8px; font-size: 0.8rem; background-color: #10b981; border-color: #10b981; color: white;" title="Livrer">
+                                            <?= icon('check', 14) ?>
+                                        </button>
+                                    </form>
+                                    <?php endif; ?>
+                                    <?php if ($_SESSION['role'] === 'Administrateur'): ?>
+                                    <a href="index.php?action=ModifierCommande&modifier=<?= htmlspecialchars($commande['NumeroBonCommande'] ?? $commande['NumeroBonDeCommande'] ?? '') ?>" class="btn btn-outline" style="padding: 4px 8px; font-size: 0.8rem; color: var(--blue); border-color: var(--blue);" title="Modifier">
+                                        <?= icon('edit', 14) ?>
+                                    </a>
+                                    <form action="index.php?action=SupprimerCommande" method="POST" style="display:inline;">
+                                        <input type="hidden" name="NumeroBonDeCommande" value="<?= htmlspecialchars($commande['NumeroBonCommande'] ?? $commande['NumeroBonDeCommande'] ?? '') ?>">
+                                        <input type="hidden" name="supprimer_commande" value="1">
+                                        <button type="submit" class="btn btn-outline" style="padding: 4px 8px; font-size: 0.8rem; color: var(--red); border-color: var(--red);" title="Supprimer">
+                                            <?= icon('trash', 14) ?>
                                         </button>
                                     </form>
                                     <?php endif; ?>

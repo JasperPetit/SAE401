@@ -1,0 +1,50 @@
+Objectif(s)
+L'objectif principal était d'améliorer l'application de gestion de colis de l'IUT. Il s'agissait d'optimiser l'architecture des données, de réorganiser le code pour le rendre plus logique et lisible pour les développeurs, et d'ajouter de nouvelles fonctionnalités qui manquaient à la version précédente.
+
+Tâches principales accomplies individuellement 
+J'ai restructuré les fichiers contrôleurs en réorganisant les fonctions par type d'action spécifique au lieu de les regrouper par rôles utilisateurs.
+
+J'ai mis à jour la logique applicative pour l'adapter à la nouvelle structure de la base de données.
+
+J'ai développé de nouvelles fonctionnalités, comme la possibilité d'ajouter les détails des colis lors de la création d'une nouvelle commande.
+
+Tâches secondaires accomplies individuellement
+J'ai travaillé sur la refonte de la base de données pour corriger les erreurs et les incohérences de conception.
+
+J'ai réparé et adapté en équipe les anciennes fonctionnalités qui avaient cassé suite au changement de la base de données.
+
+Compétences acquises 
+Techniques : 
+
+J'ai amélioré ma maîtrise du refactoring de code et de l'architecture logicielle, avec notamment la séparation des responsabilités dans les contrôleurs.
+
+Je me suis amélioré dans la modélisation et l'adaptation de bases de données relationnelles.
+
+J'ai développé mes compétences dans la création et la gestion de la logique métier.
+
+Transversales : 
+
+Travail collaboratif et résolution de bugs en équipe suite aux migrations de la base de données.
+Maintenabilité du code en pensant l'architecture pour que d'autres développeurs puissent reprendre le projet facilement.
+Résolution de problèmes et adaptation face aux erreurs imprévues.
+
+Preuves de compétences
+Techniques : 
+
+J'ai restructuré l'architecture du code : le passage de contrôleurs "par rôle" à des contrôleurs "par action" démontre ma capacité à concevoir une application de façon maintenable.
+
+J'ai modifié la base de données : j'ai été capable de modifier le code logique existant pour le lier efficacement à notre nouvelle base de données corrigée.
+
+J'ai implémenté de nouvelles features : la création de commande avec la gestion détaillée des colis prouve ma capacité à développer une fonctionnalité complète de A à Z.
+
+Transversales : 
+
+Concernant le code, ma refonte des contrôleurs témoigne de ma volonté de rendre le projet accessible et compréhensible pour toute l'équipe.
+Concernant le travail en équipe, j'ai participé activement à la réparation collective des fonctionnalités endommagées par la migration.
+
+Pistes d'amélioration pour le BUT 3
+Découvrir et mettre en place des tests automatisés. Lors de notre refonte de la base de données, plusieurs fonctionnalités sont tombées en panne. Des tests unitaires nous auraient permis de repérer ça bien plus vite.
+
+Apprendre à utiliser des pipelines d'intégration continue (CI/CD) pour faciliter le travail et les déploiements de nos projets de groupe.
+
+Approfondir mes connaissances sur les Design Patterns pour acquérir de meilleures bases architecturales sur les projets de plus grande envergure.

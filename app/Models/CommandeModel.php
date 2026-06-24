@@ -99,15 +99,29 @@ class CommandeModel {
         return $query->execute([$numero, $adresseDepart, $adresseArivee, $dateArriveeSaisie, $IdDevis, $image]);
     }
 
-    public function updateCommande($numero, $adresseDepart, $adresseArivee, $IdDevis, $dateArriveeSaisie) {
-        $sql = "UPDATE Commande SET
-                IdDevis = ?,
-                AdresseDepart = ?,
-                AdresseArivee = ?,
-                DateAjout = ?
-                WHERE NumeroBonCommande = ?";
-        $query = $this->pdo->prepare($sql);
-        return $query->execute([$IdDevis, $adresseDepart, $adresseArivee, $dateArriveeSaisie, $numero]);
+    public function updateCommande($ancienNumero, $nouveauNumero, $adresseDepart, $adresseArivee, $IdDevis, $dateArriveeSaisie, $image = null) {
+        if ($image !== null) {
+            $sql = "UPDATE Commande SET
+                    NumeroBonCommande = ?,
+                    IdDevis = ?,
+                    AdresseDepart = ?,
+                    AdresseArivee = ?,
+                    DateAjout = ?,
+                    ImageBonDeCommande = ?
+                    WHERE NumeroBonCommande = ?";
+            $query = $this->pdo->prepare($sql);
+            return $query->execute([$nouveauNumero, $IdDevis, $adresseDepart, $adresseArivee, $dateArriveeSaisie, $image, $ancienNumero]);
+        } else {
+            $sql = "UPDATE Commande SET
+                    NumeroBonCommande = ?,
+                    IdDevis = ?,
+                    AdresseDepart = ?,
+                    AdresseArivee = ?,
+                    DateAjout = ?
+                    WHERE NumeroBonCommande = ?";
+            $query = $this->pdo->prepare($sql);
+            return $query->execute([$nouveauNumero, $IdDevis, $adresseDepart, $adresseArivee, $dateArriveeSaisie, $ancienNumero]);
+        }
     }
 
     public function marquerCommandeCommeLivree($numeroBonCommande) {

@@ -93,10 +93,36 @@ class ColisModel {
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
+    public function getColisByCommande($numeroBonCommande) {
+        $sql = "SELECT co.* FROM Colis co
+                JOIN Compose_une cu ON co.IdColis = cu.IdColis
+                JOIN Commande c ON cu.IdBonCommande = c.IdBonCommande
+                WHERE c.NumeroBonCommande = ?";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute([$numeroBonCommande]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
     public function updateColis($idColis, $nomColis, $commentaire) {
         $sql  = "UPDATE Colis SET nom_colis = ?, Commentaire = ? WHERE IdColis = ?";
         $stmt = $this->pdo->prepare($sql);
         return $stmt->execute([$nomColis, $commentaire, $idColis]);
+    }
+
+    public function deleteColis($idColis) {
+        $query1 = $this->pdo->prepare("DELETE FROM Compose_une WHERE IdColis = ?");
+        $query1->execute([$idColis]);
+        
+        $query2 = $this->pdo->prepare("DELETE FROM Colis WHERE IdColis = ?");
+        return $query2->execute([$idColis]);
+    }
+
+    public function deleteColisParCommande($numeroBonCommande) {
+        $query1 = $this->pdo->prepare("DELETE FROM Compose_une WHERE IdBonCommande = (SELECT IdBonCommande FROM Commande WHERE NumeroBonCommande = ?)");
+        $query1->execute([$numeroBonCommande]);
+        
+        $query2 = $this->pdo->prepare("DELETE FROM Colis WHERE IdColis NOT IN (SELECT IdColis FROM Compose_une)");
+        $query2->execute();
     }
 
     public function getListeColisComplete() {
